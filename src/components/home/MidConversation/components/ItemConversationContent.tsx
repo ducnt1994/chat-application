@@ -20,7 +20,7 @@ Theo: VTV
       <div className={`w-[50px] h-[50px] rounded-full border border-gray-400 flex items-center justify-center relative`}>
         <img className={`max-w-full max-h-full object-contain rounded-full`} alt={'avatar'} src={'https://picsum.photos/200/200'}/>
       </div>
-      <div className={`flex-1`}>
+      <div className={`flex-1 ${position === 'left' ? '' : 'flex justify-end'}`}>
         <div className={`max-w-[430px] py-2 px-3 bg-white rounded-md relative text-left`}>
           {/*triangle*/}
           {
