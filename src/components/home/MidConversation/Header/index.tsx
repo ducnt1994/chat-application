@@ -5,11 +5,12 @@ import IconUpload from "../../../../assets/svg/IconUpload";
 import IconMail from "../../../../assets/svg/IconMail";
 import IconRedirect from "../../../../assets/svg/IconRedirect";
 import IconBirthDay from "../../../../assets/svg/MidConversation/IconBirthDay";
+import IconFemale from "../../../../assets/svg/MidConversation/IconFemale";
 
 export default function Header() {
 
   return (
-    <div className={`flex bg-white px-4 py-3`}>
+    <div className={`flex bg-white px-4 py-3 flex-1`}>
       <div className={`flex gap-1 flex-1`}>
         <div className={`w-[50px] h-[50px] rounded-full border border-gray-400 flex items-center justify-center relative`}>
           <img className={`max-w-full max-h-full object-contain rounded-full`} alt={'avatar'} src={'https://picsum.photos/200/200'}/>
@@ -30,7 +31,7 @@ export default function Header() {
 
           <div className={`mt-1 flex gap-2`}>
             <IconBirthDay/>
-            <IconBirthDay/>
+            <IconFemale/>
           </div>
         </div>
       </div>

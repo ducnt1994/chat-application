@@ -10,7 +10,7 @@ module.exports = {
         'active-filter' : "#4B5563",
         'conversation-not-read' : "#F0F0F0",
         'conversation-active' : "#DCE7F4",
-        'empty-bg' : "#F0F5FB"
+        'empty-bg' : "#F0F5FB",
       },
       spacing: {
         'max-screen' : "calc(100vh - 64px)",
