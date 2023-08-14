@@ -2,6 +2,7 @@ import IconLike from "../../../../assets/svg/MidConversation/ItemChat/IconLike";
 import IconHideComment from "../../../../assets/svg/MidConversation/ItemChat/IconHideComment";
 import IconComment from "../../../../assets/svg/MidConversation/ItemChat/IconComment";
 import IconDetele from "../../../../assets/svg/MidConversation/ItemChat/IconDetele";
+import Avatar from "../../../shared/Avatar";
 
 
 export default function ItemConversationContent({position = 'left'} : {
@@ -17,9 +18,7 @@ Theo: VTV
 
   return (
     <div className={`flex gap-3 ${position === 'left' ? "" : 'flex-row-reverse'} mt-4`}>
-      <div className={`w-[50px] h-[50px] rounded-full border border-gray-400 flex items-center justify-center relative`}>
-        <img className={`max-w-full max-h-full object-contain rounded-full`} alt={'avatar'} src={'https://picsum.photos/200/200'}/>
-      </div>
+      <Avatar size={50}/>
       <div className={`flex-1 ${position === 'left' ? '' : 'flex justify-end'}`}>
         <div className={`max-w-[430px] py-2 px-3 bg-white rounded-md relative text-left`}>
           {/*triangle*/}
