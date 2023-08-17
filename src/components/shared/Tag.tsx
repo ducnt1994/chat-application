@@ -3,7 +3,7 @@ export default function Tag({title, color} : {
   color: string
 }) {
   return (
-    <div className={`px-1 text-[10px] text-white rounded-md`} style={{
+    <div className={`px-1 text-[9px] text-white rounded`} style={{
       background: color
     }}>{title.length >= 16 ? title.toUpperCase().substring(0, 12) + '...' : title.toUpperCase()}</div>
   )

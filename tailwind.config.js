@@ -15,7 +15,7 @@ module.exports = {
         'brand-secondary' : '#D53784'
       },
       spacing: {
-        'max-screen' : "calc(100vh - 64px)",
+        'max-screen' : "calc(100vh - 55px)",
         'list-conversation': "calc(100vh - 108px)"
       }
     },

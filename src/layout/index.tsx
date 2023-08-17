@@ -5,7 +5,7 @@ export default function Layout() {
     return (
       <>
         <Header/>
-        <div className={`mt-16`}>
+        <div className={`mt-[55px]`}>
           <Outlet/>
         </div>
       </>

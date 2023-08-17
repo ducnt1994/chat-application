@@ -21,7 +21,7 @@ export default function RightConversation() {
     setActiveTab(activeKey)
   }
   return (
-    <div className={'w-[23%]'}>
+    <div className={'w-[20%]'}>
       <Tabs className={`${styles.tabCustom}`}
             defaultActiveKey={activeTab}
             items={items}

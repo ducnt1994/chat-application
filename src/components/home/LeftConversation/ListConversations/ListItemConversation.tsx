@@ -11,14 +11,14 @@ export default function ListItemConversation() {
         <Avatar size={50} absoluteComp={<div className={`absolute right-0 bottom-0`}><CountMessage total={3}/></div>}/>
         <div className={`flex-1 text-left`}>
           <div className={`font-bold text-gray-500 text-sm`}>Đức béo</div>
-          <div className={`text-gray-900 text-xs`}>Đây là đoạn chat mới nhé...</div>
+          <div className={`text-black text-xs`}>Đây là đoạn chat mới nhé...</div>
           <div className={`flex gap-1 mt-2 flex-wrap`}>
             <Tag title={'Tiềm năng'} color={'#33FF33'}/>
-            <Tag title={'Khong Tiem nang'} color={'red'}/>
-            <Tag title={'Ngon phet'} color={'#009966'}/>
-            <Tag title={'Ngon 2'} color={'#009966'}/>
-            <Tag title={'Ngon 3'} color={'#009966'}/>
-            <Tag title={'Ngon 3123jk123 123kj123kjh12 123123'} color={'#009966'}/>
+            {/*<Tag title={'Khong Tiem nang'} color={'red'}/>*/}
+            {/*<Tag title={'Ngon phet'} color={'#009966'}/>*/}
+            {/*<Tag title={'Ngon 2'} color={'#009966'}/>*/}
+            {/*<Tag title={'Ngon 3'} color={'#009966'}/>*/}
+            {/*<Tag title={'Ngon 3123jk123 123kj123kjh12 123123'} color={'#009966'}/>*/}
           </div>
         </div>
       </div>
