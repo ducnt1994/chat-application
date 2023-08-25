@@ -13,9 +13,9 @@ export default function PostContent() {
       - Nhanh tay ib để được nhận ưu đãi khi đăng ký khoá học nhé!!!`,
         id: "101272369066547_301004639252440",
       medias: [
-        'https://scontent.fhan5-10.fna.fbcdn.net/v/t39.30808-6/366367580_301016025917968_4092990046262316713_n.jpg?stp=cp1_dst-jpg_p720x720&_nc_cat=111&ccb=1-7&_nc_sid=7f8c78&_nc_ohc=yRdK3cVelhkAX_Nvwg4&_nc_ht=scontent.fhan5-10.fna&edm=AKK4YLsEAAAA&oh=00_AfBqk4AIzKJIDAmBfd7rK1F1NtQ7KA53m8S2pZ8uUzACJA&oe=64DE551D',
-        'https://scontent.fhan5-2.fna.fbcdn.net/v/t39.30808-6/367024816_301015995917971_5499540676040624444_n.jpg?stp=cp1_dst-jpg_p720x720&_nc_cat=102&ccb=1-7&_nc_sid=7f8c78&_nc_ohc=rBMOSvA9TfEAX8h6IKS&_nc_ht=scontent.fhan5-2.fna&edm=AKK4YLsEAAAA&oh=00_AfDRhsPMzWz2AFndf4rLmlDW3AkqiZ1QrySVRhJv5RPbjw&oe=64DE2272',
-        'https://scontent.fhan5-1.fna.fbcdn.net/v/t39.30808-6/366689173_301015975917973_1954949766194618816_n.jpg?stp=cp1_dst-jpg&_nc_cat=105&ccb=1-7&_nc_sid=7f8c78&_nc_ohc=siSzr3zG3eAAX9S0vx0&_nc_ht=scontent.fhan5-1.fna&edm=AKK4YLsEAAAA&oh=00_AfAyFSnxiATxK-37eT24F83levIt8m8m90sg473VGhaDSA&oe=64DE7FF2'
+        'https://picsum.photos/500/600',
+        'https://picsum.photos/800/700',
+        'https://picsum.photos/1000/1200'
       ]
     }
   return (
