@@ -3,7 +3,7 @@ import Auth from "../auth/auth";
 import Cookies from "js-cookie";
 
 function getAuthToken() {
-  return window.localStorage.getItem("accessToken") ?? "";
+  return Cookies.get("accessToken") ?? "";
 }
 
 const API = axios.create({

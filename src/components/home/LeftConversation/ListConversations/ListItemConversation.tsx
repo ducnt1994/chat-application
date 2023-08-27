@@ -1,32 +1,66 @@
 import CountMessage from "../../../shared/CountMessage";
 import IconPhone from "../../../../assets/svg/IconPhone";
 import IconMessenger from "../../../../assets/svg/IconMessenger";
-import Tag from "../../../shared/Tag";
+// import Tag from "../../../shared/Tag";
 import Avatar from "../../../shared/Avatar";
+import {IConversationItem} from "../../../../dto";
+import {CONVERSATION_IS_NOT_READ, CONVERSATION_TYPE_CHAT_FB} from "../../../../utils/constants/conversation";
+import IconComment from "../../../../assets/svg/IconComment";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../../../store";
+import {setActiveConversationId} from "../../../../reducers/conversationSlice";
 
-export default function ListItemConversation() {
+export default function ListItemConversation({conversationItem} : {
+  conversationItem: IConversationItem
+}) {
+  const dispatch = useDispatch();
+  const {activeConversationId} = useSelector((state : RootState) => state.conversation)
+  function generateLastChat() {
+    if(conversationItem.last_chat.image){
+      return '[Gửi hình ảnh]'
+    } else {
+      return conversationItem.last_chat.content.substring(0,20) + (conversationItem.last_chat.content.length > 20 ? '...' : '')
+    }
+  }
+
+  const handleClickItem = () => {
+    dispatch(setActiveConversationId({id: conversationItem._id}))
+  }
   return (
-    <div className={`flex py-3 gap-4 pl-3 pr-1 items-center bg-conversation-not-read hover:bg-conversation-active cursor-pointer border-t border-t-gray-300`}>
+    <div className={`flex py-3 gap-4 pl-3 pr-1 items-center ${conversationItem._id === activeConversationId 
+      ? 'bg-conversation-active' 
+      : conversationItem.is_read === CONVERSATION_IS_NOT_READ 
+        ? 'bg-conversation-not-read' 
+        : 'bg-white'} hover:bg-conversation-active cursor-pointer border-t border-t-gray-300`}
+         onClick={handleClickItem}
+    >
       <div className={`flex-1 flex items-center gap-4`}>
-        <Avatar size={50} absoluteComp={<div className={`absolute right-0 bottom-0`}><CountMessage total={3}/></div>}/>
+        <Avatar
+          url={conversationItem.customer_info.avatar}
+          size={50}
+          absoluteComp={
+            conversationItem.is_read === CONVERSATION_IS_NOT_READ ? <div className={`absolute right-0 bottom-0`}><CountMessage total={conversationItem.number_new_chat}/></div> : <></>
+          }/>
         <div className={`flex-1 text-left`}>
-          <div className={`font-bold text-gray-500 text-sm`}>Đức béo</div>
-          <div className={`text-black text-xs`}>Đây là đoạn chat mới nhé...</div>
+          <div className={`font-bold text-gray-500 text-sm`}>{conversationItem.customer_info.name}</div>
+          <div className={`text-black text-xs`}>{generateLastChat()}</div>
           <div className={`flex gap-1 mt-2 flex-wrap`}>
-            <Tag title={'Tiềm năng'} color={'#33FF33'}/>
-            {/*<Tag title={'Khong Tiem nang'} color={'red'}/>*/}
-            {/*<Tag title={'Ngon phet'} color={'#009966'}/>*/}
-            {/*<Tag title={'Ngon 2'} color={'#009966'}/>*/}
-            {/*<Tag title={'Ngon 3'} color={'#009966'}/>*/}
-            {/*<Tag title={'Ngon 3123jk123 123kj123kjh12 123123'} color={'#009966'}/>*/}
+            {/*<Tag title={'Tiềm năng'} color={'#33FF33'}/>*/}
           </div>
         </div>
       </div>
       <div>
         <div className={`text-sm text-gray-500`}>20:02</div>
         <div className={`mt-4 flex gap-1 justify-center`}>
-          <div><IconPhone/></div>
-          <div><IconMessenger isActive={true}/></div>
+          {
+            conversationItem.customer_info.phones.length > 0 && <div><IconPhone/></div>
+          }
+          {
+            conversationItem.type === CONVERSATION_TYPE_CHAT_FB
+              ? (<div><IconMessenger isActive={true}/></div>)
+              : (<div><IconComment isActive={true}/></div>)
+          }
+
         </div>
       </div>
     </div>

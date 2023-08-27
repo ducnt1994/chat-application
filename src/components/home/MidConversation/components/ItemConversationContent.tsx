@@ -18,7 +18,7 @@ Theo: VTV
 
   return (
     <div className={`flex gap-3 ${position === 'left' ? "" : 'flex-row-reverse'} mt-4`}>
-      <Avatar size={50}/>
+      <Avatar size={50} url={'https://picsum.photos/200/200'}/>
       <div className={`flex-1 ${position === 'left' ? '' : 'flex justify-end'}`}>
         <div className={`max-w-[430px] py-2 px-3 bg-white rounded-md relative text-left`}>
           {/*triangle*/}

@@ -1,4 +1,3 @@
-import {API} from "../libs/client";
 import axios from "axios"
 import Cookies from "js-cookie"
 export default class Auth {

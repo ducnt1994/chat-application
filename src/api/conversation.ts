@@ -1,14 +1,15 @@
 
 import { API } from "../libs/client";
+import {IFilterConversation} from "../dto";
 
 /**
  * @param {{params: {project_id: string, page: number}}} data
  * @returns
  */
-export const getConversations = async (data = {}) => {
+export const getConversations = async (data : IFilterConversation) => {
   const uri = "/projects/bot-chat/conversations";
   const res = await API.post(uri, data);
-  return res.data;
+  return res.data.data;
 };
 
 // /**

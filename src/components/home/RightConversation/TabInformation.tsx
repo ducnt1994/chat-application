@@ -9,7 +9,7 @@ export default function TabInformation() {
     <div>
       <div className={`p-3 bg-[#FAFAFA]`}>
         <div className={`flex gap-2 items-center`}>
-          <Avatar size={32}/>
+          <Avatar size={32} url={'https://picsum.photos/200/200'}/>
           <Typography className={`text-sm font-bold`}> Đức béo </Typography>
         </div>
         <div className={`mt-2 flex gap-3`}>

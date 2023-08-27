@@ -1,10 +1,6 @@
 import {IChannelItem} from "../../channel/info/channel-item";
 import {ICustomerInformation} from "../../customer/info/customer-information";
 
-export interface IConversationList {
-
-}
-
 export interface IConversationItem {
   channel: string
   channel_infor: IChannelItem,
@@ -29,5 +25,29 @@ export interface IConversationItem {
   status: number
   type: number
   updated_at: string
+  meta_data: IMetaData
   _id: string
+}
+
+export interface IMetaData {
+  content: string
+  facebook_post_id: string
+  fb_pid: string
+  id: string
+  media: {
+    _id: string
+    url: string
+    name: string
+    type?: number
+    source?: number
+    thumb: string
+  }[]
+}
+
+export interface IConversationItemLoaded {
+  info: IConversationItem
+  chatHistory: {}
+  conversationId: string
+  customerInfor: ICustomerInformation
+  isLoadingItem: false
 }

@@ -1,8 +1,13 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import {conversationSlice} from "../reducers/conversationSlice";
 
-export const store = configureStore({
-  reducer: {
-    conversation: conversationSlice.reducer,
-  },
+const rootReducer = combineReducers({
+  conversation: conversationSlice.reducer,
 });
+
+export type RootState = ReturnType<typeof rootReducer>;
+
+export const store = configureStore({
+  reducer: rootReducer
+});
+

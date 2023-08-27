@@ -1,8 +1,10 @@
 import {JSX} from "react";
+import {Avatar as Avt} from "antd";
 
-export default function Avatar({size, absoluteComp} : {
+export default function Avatar({size, absoluteComp, url} : {
   size : number
   absoluteComp?: JSX.Element
+  url: string
 }) {
   return (
     <div
@@ -11,7 +13,7 @@ export default function Avatar({size, absoluteComp} : {
         height: `${size}px`
       }}
       className={`rounded-full border border-gray-400 flex items-center justify-center relative`}>
-      <img className={`max-w-full max-h-full object-contain rounded-full`} alt={'avatar'} src={'https://picsum.photos/200/200'}/>
+      <Avt size={size} className={`max-w-full max-h-full object-contain rounded-full`} alt={'avatar'} src={url}/>
       {
         absoluteComp && absoluteComp
       }

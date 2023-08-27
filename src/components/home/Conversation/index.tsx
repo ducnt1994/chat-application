@@ -1,13 +1,16 @@
 import LeftConversation from "../LeftConversation";
 import MidConversation from "../MidConversation";
 import RightConversation from "../RightConversation";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store";
 
 export default function Conversation() {
+  const {activeConversationId} = useSelector((state : RootState) => state.conversation)
   return (
     <div className={`flex w-full h-max-screen max-h-max-screen`}>
       <LeftConversation />
       {
-        true ? (
+        activeConversationId ? (
           <>
             <MidConversation />
             <RightConversation />
