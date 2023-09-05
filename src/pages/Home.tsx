@@ -24,7 +24,9 @@ export default function Home() {
     // eslint-disable-next-line
   }, [])
 
+  useEffect(() => {
 
+  },[])
 
 
   return (

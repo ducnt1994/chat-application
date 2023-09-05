@@ -1,6 +1,7 @@
 import CountMessage from "../../../shared/CountMessage";
 import IconPhone from "../../../../assets/svg/IconPhone";
 import IconMessenger from "../../../../assets/svg/IconMessenger";
+import IconReply from "../../../../assets/svg/LeftConversation/IconReply";
 // import Tag from "../../../shared/Tag";
 import Avatar from "../../../shared/Avatar";
 import {IConversationItem} from "../../../../dto";
@@ -9,6 +10,7 @@ import IconComment from "../../../../assets/svg/IconComment";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
 import {setActiveConversationId} from "../../../../reducers/conversationSlice";
+import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 
 export default function ListItemConversation({conversationItem} : {
   conversationItem: IConversationItem
@@ -19,6 +21,9 @@ export default function ListItemConversation({conversationItem} : {
     if(conversationItem.last_chat.image){
       return '[Gửi hình ảnh]'
     } else {
+      if(!conversationItem.last_chat.content){
+        return '[Không có nội dung]';
+      }
       return conversationItem.last_chat.content.substring(0,20) + (conversationItem.last_chat.content.length > 20 ? '...' : '')
     }
   }
@@ -29,7 +34,7 @@ export default function ListItemConversation({conversationItem} : {
   return (
     <div className={`flex py-3 gap-4 pl-3 pr-1 items-center ${conversationItem._id === activeConversationId 
       ? 'bg-conversation-active' 
-      : conversationItem.is_read === CONVERSATION_IS_NOT_READ 
+      : (conversationItem.is_read === CONVERSATION_IS_NOT_READ && conversationItem.last_chat.from_customer === CONVERSATION_FROM_CUSTOMER)
         ? 'bg-conversation-not-read' 
         : 'bg-white'} hover:bg-conversation-active cursor-pointer border-t border-t-gray-300`}
          onClick={handleClickItem}
@@ -43,7 +48,7 @@ export default function ListItemConversation({conversationItem} : {
           }/>
         <div className={`flex-1 text-left`}>
           <div className={`font-bold text-gray-500 text-sm`}>{conversationItem.customer_info.name}</div>
-          <div className={`text-black text-xs`}>{generateLastChat()}</div>
+          <div className={`text-black text-xs flex gap-1`}>{conversationItem.last_chat.from_customer === CONVERSATION_FROM_CUSTOMER ? '' : <IconReply/>}{generateLastChat()}</div>
           <div className={`flex gap-1 mt-2 flex-wrap`}>
             {/*<Tag title={'Tiềm năng'} color={'#33FF33'}/>*/}
           </div>

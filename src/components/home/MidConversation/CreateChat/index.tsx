@@ -3,7 +3,7 @@ import {useState} from "react";
 import IconAddImage from "../../../../assets/svg/MidConversation/CreateChat/IconAddImage";
 import IconAddSampleReply from "../../../../assets/svg/MidConversation/CreateChat/IconAddSampleReply";
 import IconSend from "../../../../assets/svg/MidConversation/CreateChat/IconSend";
-import IconDelete from "../../../../assets/svg/IconDelete";
+// import IconDelete from "../../../../assets/svg/IconDelete";
 
 const { TextArea } = Input;
 export default function CreateChat() {

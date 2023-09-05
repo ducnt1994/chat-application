@@ -25,7 +25,7 @@ export default class Auth {
         }
         catch (e) {
             this.removeToken();
-            window.location.href = process.env.REACT_APP_APP_URL + 'auth-login?redirectUrl=' + process.env.REACT_APP_CHAT_URL;
+            window.location.href = process.env.REACT_APP_APP_URL + '/auth-login?redirectUrl=' + process.env.REACT_APP_CHAT_URL;
         }
     }
 }
