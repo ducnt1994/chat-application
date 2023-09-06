@@ -1,5 +1,6 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice, current, PayloadAction} from "@reduxjs/toolkit";
 import {IConversationItem, IConversationItemLoaded} from "../dto";
+import {IHistoryChat} from "../dto/conversation-list/response/history-chat";
 
 interface IInitialState {
   conversations: IConversationItem[] | [];
@@ -16,6 +17,11 @@ const initialState : IInitialState = {
   activeConversationId: '',
   conversationListLoaded: []
 };
+
+interface IPayloadHistoryChat {
+  conversationId: string
+  histories: IHistoryChat[]
+}
 
 
 export const conversationSlice = createSlice({
@@ -41,7 +47,25 @@ export const conversationSlice = createSlice({
           isLoadingItem: true
         })
       }
-    }
+    },
+    setHistoryChat(state: any, action: PayloadAction<IPayloadHistoryChat>){
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversationId);
+      if(conversationLoadedIndex !== false){
+        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
+        newData.chatHistory = action.payload.histories.reverse()
+        newData.isLoadingItem = false
+        state.conversationListLoaded[conversationLoadedIndex] = newData;
+      }
+    },
+    setLoadingHistoryConversation(state: any, action: PayloadAction<{conversationId: string}>){
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversationId);
+      if(conversationLoadedIndex !== false){
+        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
+        newData.isLoadingItem = true;
+        state.conversationListLoaded[conversationLoadedIndex] = newData;
+      }
+    },
+
 
   },
   // extraReducers: (builder) => {
@@ -53,6 +77,8 @@ export const conversationSlice = createSlice({
 
 export const {
   setConversationList,
-  setActiveConversationId
+  setActiveConversationId,
+  setHistoryChat,
+  setLoadingHistoryConversation
 } = conversationSlice.actions;
 export default conversationSlice.reducer;

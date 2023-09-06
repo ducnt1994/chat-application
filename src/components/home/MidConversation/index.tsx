@@ -15,7 +15,7 @@ export default function MidConversation() {
     setActiveItem(checkItemLoaded);
   }, [ activeConversationId, conversationListLoaded ])
   return (
-    <div className={'w-[60%] bg-red-400 flex flex-col'}>
+    <div className={'w-[60%] bg-empty-bg flex flex-col'}>
       <Header conversationItem={activeItem}/>
       <ConversationContent conversationItem={activeItem}/>
       <CreateChat/>

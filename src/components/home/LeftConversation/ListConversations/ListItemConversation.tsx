@@ -9,14 +9,18 @@ import {CONVERSATION_IS_NOT_READ, CONVERSATION_TYPE_CHAT_FB} from "../../../../u
 import IconComment from "../../../../assets/svg/IconComment";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
-import {setActiveConversationId} from "../../../../reducers/conversationSlice";
+import {setActiveConversationId, setHistoryChat, setLoadingHistoryConversation} from "../../../../reducers/conversationSlice";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
+import moment from "moment";
+import Cookies from "js-cookie";
+import {getConversationChats} from "../../../../api/conversation";
 
 export default function ListItemConversation({conversationItem} : {
   conversationItem: IConversationItem
 }) {
   const dispatch = useDispatch();
-  const {activeConversationId} = useSelector((state : RootState) => state.conversation)
+  const {activeConversationId, conversationListLoaded} = useSelector((state : RootState) => state.conversation)
+  const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
   function generateLastChat() {
     if(conversationItem.last_chat.image){
       return '[Gửi hình ảnh]'
@@ -28,9 +32,31 @@ export default function ListItemConversation({conversationItem} : {
     }
   }
 
-  const handleClickItem = () => {
+  const handleClickItem = async () => {
     dispatch(setActiveConversationId({id: conversationItem._id}))
+    const checkExistConversationLoaded = conversationListLoaded.find(item => conversationItem._id === item.conversationId)
+    if(!checkExistConversationLoaded || !checkExistConversationLoaded.chatHistory){
+      dispatch(setLoadingHistoryConversation({conversationId: conversationItem._id}))
+      const data = {
+        params: {
+          project_id: userInfor?.last_project_active || '',
+          page: 1,
+        },
+      };
+      if(conversationItem.type === CONVERSATION_TYPE_CHAT_FB){
+        const historyChat = await getConversationChats(conversationItem._id, data)
+        dispatch(setHistoryChat({
+          conversationId: conversationItem._id,
+          histories: historyChat
+        }))
+      } else {
+
+      }
+    }
   }
+
+
+
   return (
     <div className={`flex py-3 gap-4 pl-3 pr-1 items-center ${conversationItem._id === activeConversationId 
       ? 'bg-conversation-active' 
@@ -44,7 +70,7 @@ export default function ListItemConversation({conversationItem} : {
           url={conversationItem.customer_info.avatar}
           size={50}
           absoluteComp={
-            conversationItem.is_read === CONVERSATION_IS_NOT_READ ? <div className={`absolute right-0 bottom-0`}><CountMessage total={conversationItem.number_new_chat}/></div> : <></>
+            conversationItem.is_read === CONVERSATION_IS_NOT_READ && conversationItem.last_chat.from_customer === CONVERSATION_FROM_CUSTOMER ? <div className={`absolute right-0 bottom-0`}><CountMessage total={conversationItem.number_new_chat}/></div> : <></>
           }/>
         <div className={`flex-1 text-left`}>
           <div className={`font-bold text-gray-500 text-sm`}>{conversationItem.customer_info.name}</div>
@@ -55,7 +81,8 @@ export default function ListItemConversation({conversationItem} : {
         </div>
       </div>
       <div>
-        <div className={`text-sm text-gray-500`}>20:02</div>
+        <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('DD/MM')}</div>
+        <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('HH:mm')}</div>
         <div className={`mt-4 flex gap-1 justify-center`}>
           {
             conversationItem.customer_info.phones.length > 0 && <div><IconPhone/></div>

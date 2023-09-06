@@ -3,14 +3,17 @@ import {Typography} from "antd";
 import IconPhone from "../../../assets/svg/RightConversation/IconPhone";
 import IconComment from "../../../assets/svg/RightConversation/IconComment";
 import IconTicket from "../../../assets/svg/RightConversation/IconTicket";
+import {IConversationItemLoaded} from "../../../dto";
 
-export default function TabInformation() {
+export default function TabInformation({conversationItem} : {
+  conversationItem: IConversationItemLoaded | undefined
+}) {
   return (
     <div>
       <div className={`p-3 bg-[#FAFAFA]`}>
         <div className={`flex gap-2 items-center`}>
-          <Avatar size={32} url={'https://picsum.photos/200/200'}/>
-          <Typography className={`text-sm font-bold`}> Đức béo </Typography>
+          <Avatar size={32} url={conversationItem?.info.customer_info.avatar || ''}/>
+          <Typography className={`text-sm font-bold`}> {conversationItem?.info.customer_info.name} </Typography>
         </div>
         <div className={`mt-2 flex gap-3`}>
           <div className={`cursor-pointer flex items-center gap-1`}>

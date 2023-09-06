@@ -7,6 +7,7 @@ import {CONVERSATION_TYPE_COMMENT_FB} from "../../../../utils/constants/conversa
 export default function ConversationContent({conversationItem} : {
   conversationItem: IConversationItemLoaded | undefined
 }) {
+  console.log({conversationItem})
   return (
     <>
       {
@@ -20,7 +21,7 @@ export default function ConversationContent({conversationItem} : {
             (!conversationItem || conversationItem.isLoadingItem) ? (
               <Spin size={'large'} className={`mt-4`}/>
             ) : (
-              <ChatContent/>
+              <ChatContent conversationItem={conversationItem}/>
             )
           }
         </div>

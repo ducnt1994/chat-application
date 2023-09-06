@@ -1,5 +1,6 @@
 import {IChannelItem} from "../../channel/info/channel-item";
 import {ICustomerInformation} from "../../customer/info/customer-information";
+import {IHistoryChat} from "./history-chat";
 
 export interface IConversationItem {
   channel: string
@@ -46,7 +47,7 @@ export interface IMetaData {
 
 export interface IConversationItemLoaded {
   info: IConversationItem
-  chatHistory: {}
+  chatHistory: IHistoryChat[]
   conversationId: string
   customerInfor: ICustomerInformation
   isLoadingItem: false

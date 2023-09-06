@@ -1,6 +1,7 @@
 
 import { API } from "../libs/client";
 import {IFilterConversation} from "../dto";
+import {IHistoryChat} from "../dto/conversation-list/response/history-chat";
 
 /**
  * @param {{params: {project_id: string, page: number}}} data
@@ -23,16 +24,16 @@ export const getConversations = async (data : IFilterConversation) => {
 //   return res.data;
 // };
 //
-// /**
-//  * @param {string} conversationId
-//  * @param {{params: {project_id: string, page: number}}} data
-//  * @returns
-//  */
-// export const getConversationChats = async (conversationId, data = {}) => {
-//   const uri = `/projects/bot-chat/conversations/${conversationId}/chats/list`;
-//   const res = await API.get(uri, data);
-//   return res.data;
-// };
+/**
+ * @param {string} conversationId
+ * @param {{params: {project_id: string, page: number}}} data
+ * @returns
+ */
+export const getConversationChats = async (conversationId : string, data = {}): Promise<IHistoryChat[]> => {
+  const uri = `/projects/bot-chat/conversations/${conversationId}/chats/list`;
+  const res = await API.get(uri, data);
+  return res.data.data;
+};
 //
 // /**
 //  * @param {{project_id: string, channel: string, customer_id: string}} data
