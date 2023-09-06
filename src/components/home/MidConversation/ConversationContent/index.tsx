@@ -7,7 +7,6 @@ import {CONVERSATION_TYPE_COMMENT_FB} from "../../../../utils/constants/conversa
 export default function ConversationContent({conversationItem} : {
   conversationItem: IConversationItemLoaded | undefined
 }) {
-  console.log({conversationItem})
   return (
     <>
       {

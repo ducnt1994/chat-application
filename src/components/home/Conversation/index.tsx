@@ -1,8 +1,10 @@
 import LeftConversation from "../LeftConversation";
-import MidConversation from "../MidConversation";
-import RightConversation from "../RightConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store";
+import {lazy} from "react";
+
+const MidConversation = lazy(() => import('../MidConversation'))
+const RightConversation = lazy(() => import('../RightConversation'))
 
 export default function Conversation() {
   const {activeConversationId} = useSelector((state : RootState) => state.conversation)
