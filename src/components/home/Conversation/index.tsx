@@ -1,7 +1,7 @@
 import LeftConversation from "../LeftConversation";
 import {useSelector} from "react-redux";
 import {RootState} from "../../../store";
-import {lazy} from "react";
+import {lazy, Suspense} from "react";
 
 const MidConversation = lazy(() => import('../MidConversation'))
 const RightConversation = lazy(() => import('../RightConversation'))
@@ -14,8 +14,10 @@ export default function Conversation() {
       {
         activeConversationId ? (
           <>
-            <MidConversation />
-            <RightConversation />
+            <Suspense>
+              <MidConversation />
+              <RightConversation />
+            </Suspense>
           </>
         ) : (
           <div className={`bg-empty-bg w-full flex justify-center items-center`}>
