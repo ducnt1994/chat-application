@@ -18,7 +18,7 @@ export default function MidConversation() {
     <div className={'w-[60%] bg-empty-bg flex flex-col'}>
       <Header conversationItem={activeItem}/>
       <ConversationContent conversationItem={activeItem}/>
-      <CreateChat/>
+      <CreateChat conversationItem={activeItem}/>
     </div>
   )
 }

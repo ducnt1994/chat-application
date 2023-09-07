@@ -42,7 +42,7 @@ export default function ItemConversationContent({position = 'left', historyItem}
                 typeof  historyItem?.media !== "undefined" && historyItem?.media.length > 0 && historyItem?.media.map((image, index) => {
                   return <Image
                     key={index}
-                    className={`max-w-[128px] max-h-[128px]`}
+                    className={`max-w-[128px] max-h-[128px] object-contain`}
                     alt={'avatar'}
                     fallback={IMAGE_ERROR}
                     src={image.url}/>

@@ -5,7 +5,6 @@ import {CONVERSATION_TYPE_MEDIA_VIDEO} from "../../../../utils/constants/convers
 export default function PostContent({postData} : {
   postData: IMetaData
 }) {
-    console.log({postData})
   return (
     <div className={`pb-6 border-b border-b-gray-300`}>
       <div className={`whitespace-pre-line text-left text-sm text-gray-900`} dangerouslySetInnerHTML={{__html: postData.content}}>

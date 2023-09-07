@@ -13,7 +13,7 @@ import {setActiveConversationId, setHistoryChat, setLoadingHistoryConversation} 
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import moment from "moment";
 import Cookies from "js-cookie";
-import {getConversationChats} from "../../../../api/conversation";
+import {getConversationChats, getConversationComments} from "../../../../api/conversation";
 
 export default function ListItemConversation({conversationItem} : {
   conversationItem: IConversationItem
@@ -43,15 +43,16 @@ export default function ListItemConversation({conversationItem} : {
           page: 1,
         },
       };
+      let historyChat;
       if(conversationItem.type === CONVERSATION_TYPE_CHAT_FB){
-        const historyChat = await getConversationChats(conversationItem._id, data)
-        dispatch(setHistoryChat({
-          conversationId: conversationItem._id,
-          histories: historyChat
-        }))
+        historyChat = await getConversationChats(conversationItem._id, data)
       } else {
-
+        historyChat = await getConversationComments(conversationItem._id, data)
       }
+      dispatch(setHistoryChat({
+        conversationId: conversationItem._id,
+        histories: historyChat
+      }))
     }
   }
 

@@ -15,8 +15,6 @@ export default function Home() {
       project_id: userInfor?.last_project_active || "",
       page: 1
     });
-    console.log({conversations})
-
     dispatch(setConversationList(conversations))
   }
 

@@ -45,16 +45,16 @@ export const getConversationChats = async (conversationId : string, data = {}): 
 //   return res.data;
 // };
 //
-// /**
-//  * @param {string} conversationId
-//  * @param {{project_id: string, content: string, image: string}} data
-//  * @returns
-//  */
-// export const sendChat = async (conversationId, data = {}) => {
-//   const uri = `/projects/bot-chat/conversations/${conversationId}/chats`;
-//   const res = await API.post(uri, data);
-//   return res.data;
-// };
+/**
+ * @param {string} conversationId
+ * @param {{project_id: string, content: string, image: string}} data
+ * @returns
+ */
+export const sendChat = async (conversationId: string, data = {}): Promise<IHistoryChat> => {
+  const uri = `/projects/bot-chat/conversations/${conversationId}/chats`;
+  const res = await API.post(uri, data);
+  return res.data.data;
+};
 //
 // /**
 //  * @param {string} conversationId
@@ -82,16 +82,16 @@ export const getConversationChats = async (conversationId : string, data = {}): 
 //   return res.data;
 // };
 //
-// /**
-//  * @param {string} conversationId
-//  * @param {{params: {project_id: string, page: number}}} data
-//  * @returns
-//  */
-// export const getConversationComments = async (conversationId, data = {}) => {
-//   const uri = `/projects/bot-chat/conversations/${conversationId}/comments/list`;
-//   const res = await API.get(uri, data);
-//   return res.data;
-// };
+/**
+ * @param {string} conversationId
+ * @param {{params: {project_id: string, page: number}}} data
+ * @returns
+ */
+export const getConversationComments = async (conversationId: string, data = {}): Promise<IHistoryChat[]> => {
+  const uri = `/projects/bot-chat/conversations/${conversationId}/comments/list`;
+  const res = await API.get(uri, data);
+  return res.data.data;
+};
 //
 // /**
 //  * @param {string} conversationId

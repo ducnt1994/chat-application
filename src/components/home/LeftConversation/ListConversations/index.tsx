@@ -6,7 +6,6 @@ import {Spin} from "antd";
 export default function ListConversations() {
   // eslint-disable-next-line
   const {conversations, isLoadingConversations} = useSelector((state : RootState) => state.conversation)
-  console.log(conversations)
   return (
     <div className={`overflow-y-scroll h-list-conversation`}>
       {

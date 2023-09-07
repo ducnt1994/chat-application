@@ -65,6 +65,25 @@ export const conversationSlice = createSlice({
         state.conversationListLoaded[conversationLoadedIndex] = newData;
       }
     },
+    setHistoryItem(state: any, action: PayloadAction<{historyItem: IHistoryChat}>){
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === state.activeConversationId);
+      if(conversationLoadedIndex !== false){
+        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
+        newData.chatHistory.push(action.payload.historyItem)
+        state.conversationListLoaded[conversationLoadedIndex] = newData;
+      }
+    },
+    setHistoryItemByFakeId(state: any, action: PayloadAction<{historyItem: IHistoryChat, fakeId: string}>){
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === state.activeConversationId);
+      if(conversationLoadedIndex !== false){
+        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
+        const indexHistoryItemByFakeId = newData.chatHistory.findIndex((history : IHistoryChat) => history.fake_id === action.payload.fakeId)
+        if(indexHistoryItemByFakeId !== false){
+          newData.chatHistory.splice(indexHistoryItemByFakeId, 1, action.payload.historyItem)
+        }
+        state.conversationListLoaded[conversationLoadedIndex] = newData;
+      }
+    },
 
 
   },
@@ -79,6 +98,8 @@ export const {
   setConversationList,
   setActiveConversationId,
   setHistoryChat,
-  setLoadingHistoryConversation
+  setLoadingHistoryConversation,
+  setHistoryItem,
+  setHistoryItemByFakeId
 } = conversationSlice.actions;
 export default conversationSlice.reducer;
