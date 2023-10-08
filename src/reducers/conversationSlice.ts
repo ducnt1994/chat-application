@@ -1,5 +1,5 @@
-import {createSlice, current, PayloadAction} from "@reduxjs/toolkit";
-import {IConversationItem, IConversationItemLoaded} from "../dto";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {IConversationItem, IConversationItemLoaded, IFilter} from "../dto";
 import {IHistoryChat} from "../dto/conversation-list/response/history-chat";
 
 interface IInitialState {
@@ -8,6 +8,7 @@ interface IInitialState {
   isLoadingConversations: boolean
   activeConversationId: string
   conversationListLoaded: IConversationItemLoaded[] | []
+  filters: IFilter
 }
 
 const initialState : IInitialState = {
@@ -15,7 +16,8 @@ const initialState : IInitialState = {
   conversationPage: 1,
   isLoadingConversations: true,
   activeConversationId: '',
-  conversationListLoaded: []
+  conversationListLoaded: [],
+  filters: {}
 };
 
 interface IPayloadHistoryChat {
@@ -28,11 +30,20 @@ export const conversationSlice = createSlice({
   name: "conversation",
   initialState,
   reducers: {
+    resetConversationByFilter(state: any) {
+      return initialState
+    },
     setConversationList(state: any, action : PayloadAction<IConversationItem[]>) {
-      state.conversations = [...action.payload];
+      state.conversations = state.conversations.concat(action.payload);
       if(state.conversationPage === 1){
         state.isLoadingConversations = false;
       }
+      state.conversationPage += 1;
+    },
+    setFilters(state: any, action : PayloadAction<IFilter>) {
+      console.log(action.payload)
+      state.filters = action.payload
+      console.log(state.filters)
     },
     setActiveConversationId(state: any, action: PayloadAction<{id: string}>){
       state.activeConversationId = action.payload.id
@@ -100,6 +111,8 @@ export const {
   setHistoryChat,
   setLoadingHistoryConversation,
   setHistoryItem,
-  setHistoryItemByFakeId
+  setHistoryItemByFakeId,
+  setFilters,
+  resetConversationByFilter
 } = conversationSlice.actions;
 export default conversationSlice.reducer;

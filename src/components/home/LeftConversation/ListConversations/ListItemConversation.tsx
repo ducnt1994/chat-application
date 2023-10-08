@@ -14,6 +14,7 @@ import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import moment from "moment";
 import Cookies from "js-cookie";
 import {getConversationChats, getConversationComments} from "../../../../api/conversation";
+import {Tooltip, Avatar as Avt} from "antd";
 
 export default function ListItemConversation({conversationItem} : {
   conversationItem: IConversationItem
@@ -28,7 +29,7 @@ export default function ListItemConversation({conversationItem} : {
       if(!conversationItem.last_chat.content){
         return '[Không có nội dung]';
       }
-      return conversationItem.last_chat.content.substring(0,20) + (conversationItem.last_chat.content.length > 20 ? '...' : '')
+      return conversationItem.last_chat.content.substring(0,18) + (conversationItem.last_chat.content.length > 18 ? '...' : '')
     }
   }
 
@@ -82,9 +83,21 @@ export default function ListItemConversation({conversationItem} : {
         </div>
       </div>
       <div>
-        <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('DD/MM')}</div>
-        <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('HH:mm')}</div>
-        <div className={`mt-4 flex gap-1 justify-center`}>
+        <div className={`flex gap-2`}>
+          <div>
+            <Tooltip placement="bottom" title={conversationItem.channel_infor.name}>
+              <div>
+                <Avt size={18} src={conversationItem.channel_infor.picture}/>
+              </div>
+            </Tooltip>
+          </div>
+          <div>
+            <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('DD/MM')}</div>
+            <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('HH:mm')}</div>
+          </div>
+        </div>
+
+        <div className={`mt-4 flex gap-1 justify-end`}>
           {
             conversationItem.customer_info.phones.length > 0 && <div><IconPhone/></div>
           }

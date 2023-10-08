@@ -27,7 +27,6 @@ export default function ChatContent({conversationItem} : {
         conversationItem?.chatHistory.map((historyItem, index) => {
           return <ItemConversationContentComment
             key={index}
-            position={historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'left' : 'right'}
             historyItem={historyItem}
           />
         })

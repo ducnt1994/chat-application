@@ -52,3 +52,14 @@ export interface IConversationItemLoaded {
   customerInfor: ICustomerInformation
   isLoadingItem: false
 }
+
+export interface IFilter {
+  not_read?: boolean
+  has_phone?: boolean
+  type?: number
+  not_reply?: boolean
+  range_time?: {
+    from: string
+    to: string
+  }
+}

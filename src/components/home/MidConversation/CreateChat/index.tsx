@@ -73,7 +73,7 @@ export default function CreateChat({conversationItem} : {
   }, [isSendMessageSuccess, isSendMessageFail])
   return (
     <div className={`bg-create-chat p-3 text-left`}>
-      <UploadFile/>
+      {/*<UploadFile/>*/}
 
       <TextArea
         value={value}

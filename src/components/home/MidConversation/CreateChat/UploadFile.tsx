@@ -95,9 +95,8 @@ export default function UploadFile() {
         listType="picture-card"
         fileList={fileList}
         onPreview={handlePreview}
-        onChange={handleChange}
-      >
-        {/*{fileList.length >= 8 ? null : uploadButton}*/}
+        onChange={handleChange}>
+        {fileList.length >= 8 ? null : uploadButton}
       </Upload>
     </div>
   )
