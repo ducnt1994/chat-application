@@ -32,7 +32,8 @@ export interface IHistoryChat {
   },
   social_network_id: string
   social_netword_post_id?: string
-  updated_at: string
+  parent_social_network_id?: string
+  updated_at?: string
   is_hide?: number
   is_like?: number
   is_reply?: number

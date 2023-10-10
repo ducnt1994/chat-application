@@ -1,0 +1,8 @@
+.custom-upload {
+  :global {
+    .ant-upload-list-item-container{
+      width: 75px!important;
+      height: 75px!important;
+    }
+  }
+}

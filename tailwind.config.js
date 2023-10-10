@@ -12,7 +12,8 @@ module.exports = {
         'conversation-active' : "#DCE7F4",
         'empty-bg' : "#F0F5FB",
         'create-chat' : "#F6F6F6",
-        'brand-secondary' : '#D53784'
+        'brand-secondary' : '#D53784',
+        'bg-chat-page' : '#FFF6DE'
       },
       spacing: {
         'max-screen' : "calc(100vh - 55px)",

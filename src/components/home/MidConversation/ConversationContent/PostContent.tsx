@@ -15,7 +15,7 @@ export default function PostContent({postData} : {
           postData.media.map((item, key) => {
             return <div key={key}>
               <div className={`w-[120px] rounded-md h-[120px] border border-gray-200 flex items-center justify-center relative bg-white`}>
-                <Image className={`max-w-full max-h-full object-contain`} alt={'avatar'} src={item.type === CONVERSATION_TYPE_MEDIA_VIDEO ? item.thumb : item.url}/>
+                <Image width={'100%'} height={'100%'} className={`object-contain`} alt={'avatar'} src={item.type === CONVERSATION_TYPE_MEDIA_VIDEO ? item.thumb : item.url}/>
               </div>
             </div>
           })

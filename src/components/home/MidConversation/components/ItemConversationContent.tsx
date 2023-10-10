@@ -23,9 +23,11 @@ export default function ItemConversationContent({position = 'left', historyItem}
 
   return (
     <div className={`flex gap-3 ${position === 'left' ? "" : 'flex-row-reverse items-end'} mt-4`}>
-      <Avatar size={getItemSide() === 'left' ? 42 : 24} url={historyItem?.sender?.avatar || ""}/>
+      {
+        historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && <Avatar size={getItemSide() === 'left' ? 42 : 24} url={historyItem?.sender?.avatar || ""}/>
+      }
       <div className={`flex-1 ${position === 'left' ? '' : 'flex justify-end'}`}>
-        <div className={`max-w-[430px] py-2 px-3 bg-white rounded-md relative text-left w-fit`}>
+        <div className={`max-w-[430px] py-1 px-2 bg-white rounded-md relative text-left w-fit`}>
 
           <div className={`text-[13px] whitespace-pre-line break-words`} dangerouslySetInnerHTML={{__html: historyItem.content}}></div>
           {

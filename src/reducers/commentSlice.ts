@@ -9,7 +9,7 @@ interface IInitialState {
   activeConversationId: string
   conversationListLoaded: IConversationItemLoaded[] | []
   filters: IFilter
-  selectedCommentIdToReply: string
+  selectedCommentToReply: string
 }
 
 const initialState : IInitialState = {
@@ -19,7 +19,7 @@ const initialState : IInitialState = {
   activeConversationId: '',
   conversationListLoaded: [],
   filters: {},
-  selectedCommentIdToReply: ""
+  selectedCommentToReply: ""
 };
 
 interface IPayloadHistoryChat {
@@ -32,9 +32,6 @@ export const conversationSlice = createSlice({
   name: "conversation",
   initialState,
   reducers: {
-    setCommentToReply(state: any, action: PayloadAction<string>){
-      state.selectedCommentIdToReply = action.payload
-    },
     resetConversationByFilter(state: any) {
       return initialState
     },
@@ -98,50 +95,7 @@ export const conversationSlice = createSlice({
         state.conversationListLoaded[conversationLoadedIndex] = newData;
       }
     },
-    setHistoryItemFakeComment(state: any, action: PayloadAction<IHistoryChat>){
-      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === state.activeConversationId);
-      if(conversationLoadedIndex !== false){
-        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
-        const indexHistoryItemByFakeId = newData.chatHistory.findIndex((history : IHistoryChat) => history.social_network_id === action.payload.parent_social_network_id)
-        if(indexHistoryItemByFakeId !== false){
-          let parentComment = newData.chatHistory[indexHistoryItemByFakeId];
-          if(typeof parentComment.children !== 'undefined'){
-            parentComment.children.push(action.payload)
-          } else {
-            parentComment.children = [action.payload]
-          }
-          newData.chatHistory[indexHistoryItemByFakeId] = parentComment
-        }
-        state.conversationListLoaded[conversationLoadedIndex] = newData;
-      }
-    },
-    setNewListComment(state: any, action: PayloadAction<IHistoryChat>){
-      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversation_id);
-      if(conversationLoadedIndex !== false){
-        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
-        const indexCommentResponse = newData.chatHistory.findIndex((history: IHistoryChat) => history.social_network_id === action.payload.social_network_id)
-        if(indexCommentResponse !== false){
-          newData.chatHistory[indexCommentResponse] = action.payload
-        }
-        state.conversationListLoaded[conversationLoadedIndex] = newData;
-      }
-    },
-    removeFakeComment(state: any, action: PayloadAction<IHistoryChat>){
-      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversation_id);
-      if(conversationLoadedIndex !== false){
-        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
-        const indexParentComment = newData.chatHistory.findIndex((history: IHistoryChat) => history.social_network_id === action.payload.parent_social_network_id)
-        if(indexParentComment !== false){
-          const parentComment = newData.chatHistory[indexParentComment]
-          const indexFakeComment = parentComment.children.map((child : IHistoryChat) => child.social_network_id === action.payload.social_network_id)
-          if(indexFakeComment !== false){
-            parentComment.children.splice(indexFakeComment, 1);
-            newData.chatHistory[indexParentComment] = parentComment
-          }
-        }
-        state.conversationListLoaded[conversationLoadedIndex] = newData
-      }
-    }
+
 
   },
   // extraReducers: (builder) => {
@@ -159,10 +113,6 @@ export const {
   setHistoryItem,
   setHistoryItemByFakeId,
   setFilters,
-  resetConversationByFilter,
-  setCommentToReply,
-  setHistoryItemFakeComment,
-  setNewListComment,
-  removeFakeComment
+  resetConversationByFilter
 } = conversationSlice.actions;
 export default conversationSlice.reducer;

@@ -93,16 +93,16 @@ export const getConversationComments = async (conversationId: string, data = {})
   return res.data.data;
 };
 //
-// /**
-//  * @param {string} conversationId
-//  * @param {{project_id: string, content: string, image: string}} data
-//  * @returns
-//  */
-// export const sendComment = async (conversationId, data = {}) => {
-//   const uri = `/projects/bot-chat/conversations/${conversationId}/comments`;
-//   const res = await API.post(uri, data);
-//   return res.data;
-// };
+/**
+ * @param {string} conversationId
+ * @param {{project_id: string, content: string, image: string}} data
+ * @returns
+ */
+export const sendComment = async (conversationId : string, data = {}) => {
+  const uri = `/projects/bot-chat/conversations/${conversationId}/comments`;
+  const res = await API.post(uri, data);
+  return res.data.data;
+};
 //
 // /**
 //  * @param {string} conversationId

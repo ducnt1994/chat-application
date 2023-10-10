@@ -4,6 +4,15 @@ export const CONVERSATION_TYPE_CHAT_FB = 2;
 export const CONVERSATION_IS_READ = 1;
 export const CONVERSATION_IS_NOT_READ = 0;
 
+export const CONVERSATION_IS_HIDE = 1;
+export const CONVERSATION_IS_NOT_HIDE = 0;
+
+export const CONVERSATION_IS_LIKE = 1;
+export const CONVERSATION_IS_NOT_LIKE = 0;
+
+export const CONVERSATION_IS_REPLY = 1;
+export const CONVERSATION_IS_NOT_REPLY = 0;
+
 export const CONVERSATION_TYPE_MEDIA_IMAGE = 1;
 export const CONVERSATION_TYPE_MEDIA_VIDEO = 2;
 export const CONVERSATION_MEDIA_SOURCE_POST = 1;

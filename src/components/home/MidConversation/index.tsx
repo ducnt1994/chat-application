@@ -14,6 +14,7 @@ export default function MidConversation() {
     const checkItemLoaded = conversationListLoaded.find(item => item.conversationId === activeConversationId);
     setActiveItem(checkItemLoaded);
   }, [ activeConversationId, conversationListLoaded ])
+
   return (
     <div className={'w-[60%] bg-empty-bg flex flex-col'}>
       <Header conversationItem={activeItem}/>
