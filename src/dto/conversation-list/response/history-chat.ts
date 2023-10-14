@@ -1,9 +1,9 @@
 export interface IMediaItem {
-  _id: string
+  _id?: string
   name: string
   created_at: string
   project_id: string
-  source: number
+  source?: number
   url: string
 }
 

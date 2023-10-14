@@ -98,7 +98,7 @@ export const ItemRender = ({historyItem, borderColorItem} : {
         <Popover
           overlayClassName={`${styles.PopoverCustom}`}
           trigger={'hover'}
-          placement={'rightTop'}
+          placement={historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'rightTop' : 'leftTop'}
           content={hoverItem}>
           <div
             style={{borderColor: borderColorItem}}
@@ -136,6 +136,9 @@ export const ItemRender = ({historyItem, borderColorItem} : {
               }
             </div>
           </div>
+          {
+            typeof historyItem.is_sending_message && historyItem.is_sending_message && <div className={`text-[10px] text-right text-gray-400`}>Đang gửi...</div>
+          }
         </Popover>
       </div>
       {/*{*/}
