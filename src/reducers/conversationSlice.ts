@@ -8,7 +8,8 @@ interface IInitialState {
   isLoadingConversations: boolean
   activeConversationId: string
   conversationListLoaded: IConversationItemLoaded[] | []
-  filters: IFilter
+  filters: IFilter,
+  searchText: string,
   selectedCommentIdToReply: string
 }
 
@@ -19,7 +20,8 @@ const initialState : IInitialState = {
   activeConversationId: '',
   conversationListLoaded: [],
   filters: {},
-  selectedCommentIdToReply: ""
+  selectedCommentIdToReply: "",
+  searchText: ""
 };
 
 interface IPayloadHistoryChat {
@@ -34,6 +36,10 @@ export const conversationSlice = createSlice({
   reducers: {
     setCommentToReply(state: any, action: PayloadAction<string>){
       state.selectedCommentIdToReply = action.payload
+    },
+    setSearchText(state: any, action: PayloadAction<string>){
+      state.searchText = action.payload
+      state.conversationPage = 1
     },
     resetConversationByFilter(state: any) {
       return initialState
@@ -163,6 +169,7 @@ export const {
   setCommentToReply,
   setHistoryItemFakeComment,
   setNewListComment,
-  removeFakeComment
+  removeFakeComment,
+  setSearchText
 } = conversationSlice.actions;
 export default conversationSlice.reducer;

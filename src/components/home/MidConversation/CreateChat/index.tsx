@@ -236,6 +236,12 @@ export default function CreateChat({conversationItem} : {
     setFileListSelected(newList)
   }
 
+  const handleRemoveFileUpload = (indexFile : number) => {
+    const newListFile = [...fileListSelected]
+    newListFile.splice(indexFile, 1)
+    setFileListSelected(newListFile);
+  }
+
   useEffect(() => {
     if(isSendMessageSuccess){
       setTimeout(() => {
@@ -255,7 +261,9 @@ export default function CreateChat({conversationItem} : {
 
   return (
     <div className={`bg-create-chat p-3 text-left`}>
-      <FileUploadPreview fileListSelected={fileListSelected}/>
+      <FileUploadPreview
+        handleRemoveFileUpload={(index: number) => handleRemoveFileUpload(index)}
+        fileListSelected={fileListSelected}/>
       <TextArea
         value={value}
         onChange={(e) => setValue(e.target.value)}

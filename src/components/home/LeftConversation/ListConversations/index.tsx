@@ -11,7 +11,13 @@ import {useState} from "react";
 
 export default function ListConversations() {
   // eslint-disable-next-line
-  const {conversations, isLoadingConversations, conversationPage, filters} = useSelector((state : RootState) => state.conversation)
+  const {
+    conversations,
+    isLoadingConversations,
+    conversationPage,
+    filters,
+    searchText
+  } = useSelector((state : RootState) => state.conversation)
   const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
   const dispatch = useDispatch();
   const [hasMoreConversation, setHasMoreConversation] = useState<boolean>(true)
@@ -19,7 +25,8 @@ export default function ListConversations() {
     const conversations : IConversationItem[] = await getConversations({
       project_id: userInfor?.last_project_active || "",
       page: conversationPage,
-      filter: filters
+      filter: filters,
+      ...(searchText && {search: searchText})
     });
     if(!conversations){
       setHasMoreConversation(false)

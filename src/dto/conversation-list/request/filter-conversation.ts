@@ -4,4 +4,5 @@ export interface IFilterConversation {
   project_id: string
   page: number
   filter: IFilter
+  search?: string
 }

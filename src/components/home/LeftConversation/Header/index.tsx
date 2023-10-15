@@ -1,12 +1,15 @@
 import IconSearch from "../../../../assets/svg/IconSearch";
 import IconArrowDown from "../../../../assets/svg/IconArrowDown";
 import IconTag from "../../../../assets/svg/IconTag";
+import {useDispatch} from "react-redux";
+import {resetConversationByFilter, setSearchText} from "../../../../reducers/conversationSlice";
 
 export default function Header() {
-
+  const dispatch = useDispatch()
   const handleKeyDown = (event : any) => {
     if (event.key === 'Enter') {
-      console.log('ducbeo')
+      dispatch(resetConversationByFilter())
+      dispatch(setSearchText(event.target.value))
     }
   };
 

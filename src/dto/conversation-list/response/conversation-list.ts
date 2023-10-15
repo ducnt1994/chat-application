@@ -61,5 +61,5 @@ export interface IFilter {
   range_time?: {
     from: string
     to: string
-  }
+  },
 }
