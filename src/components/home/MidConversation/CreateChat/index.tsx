@@ -9,7 +9,7 @@ import {sendChat, sendComment} from "../../../../api/conversation";
 import {CONVERSATION_NOT_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import {useDispatch, useSelector} from "react-redux";
 import {
-  removeFakeComment, setCommentToReply,
+  removeFakeComment, setCommentToReply, setCurrentConversationToTop,
   setHistoryItem,
   setHistoryItemByFakeId,
   setHistoryItemFakeComment, setNewListComment
@@ -24,7 +24,6 @@ import {
   CONVERSATION_TYPE_COMMENT_FB
 } from "../../../../utils/constants/conversation";
 import {RootState} from "../../../../store";
-import {alertToast} from "../../../../helper/toast";
 import {IHistoryChat, IMediaItem} from "../../../../dto/conversation-list/response/history-chat";
 import FileUploadPreview from "./FileUploadPreview";
 import {uploadImage} from "../../../../api/uploadFile";
@@ -51,10 +50,6 @@ export default function CreateChat({conversationItem} : {
 
   const handleSendComment = async () => {
     if(!selectedCommentIdToReply){
-      // alertToast({
-      //   type: "warning",
-      //   message: 'Vui lòng chọn bình luận để trả lời',
-      // })
       message.warning('Vui lòng chọn bình luận để trả lời',2)
       return;
     }
@@ -83,15 +78,13 @@ export default function CreateChat({conversationItem} : {
     }
 
     if(!selectedCommentInfo){
-      alertToast({
-        type: 'warning',
-        message: "Không tồn tại bình luận"
-      })
+      message.warning("Không tồn tại bình luận")
       return;
     }
 
     const fakeData : IHistoryChat = generateFakeComment(selectedCommentInfo, media)
     dispatch(setHistoryItemFakeComment(fakeData))
+    dispatch(setCurrentConversationToTop())
 
     const dataComment = {
       project_id: userInfor.last_project_active,
@@ -166,6 +159,7 @@ export default function CreateChat({conversationItem} : {
       ...(value !== "" && { content: value }),
       // ...(mediaItems && mediaItems.length > 0 && { images: mediaItems.map((item) => item.name) }),
     };
+    dispatch(setCurrentConversationToTop())
 
     let fakeData = generateFakeData(fileListSelected.map((item) => {
       return {

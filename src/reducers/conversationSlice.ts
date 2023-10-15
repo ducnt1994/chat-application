@@ -10,7 +10,8 @@ interface IInitialState {
   conversationListLoaded: IConversationItemLoaded[] | []
   filters: IFilter,
   searchText: string,
-  selectedCommentIdToReply: string
+  selectedCommentIdToReply: string,
+  scrollToTop: boolean
 }
 
 const initialState : IInitialState = {
@@ -21,7 +22,8 @@ const initialState : IInitialState = {
   conversationListLoaded: [],
   filters: {},
   selectedCommentIdToReply: "",
-  searchText: ""
+  searchText: "",
+  scrollToTop: false
 };
 
 interface IPayloadHistoryChat {
@@ -147,7 +149,19 @@ export const conversationSlice = createSlice({
         }
         state.conversationListLoaded[conversationLoadedIndex] = newData
       }
-    }
+    },
+    setCurrentConversationToTop(state: any){
+      const conversationLoadedIndex = state.conversations.findIndex((item : IConversationItem) => item._id === state.activeConversationId);
+      if(conversationLoadedIndex !== false){
+        console.log({conversationLoadedIndex})
+        const newData = [...state.conversations]
+        const itemChatToPushTop = newData[conversationLoadedIndex];
+        newData.splice(conversationLoadedIndex,1)
+        newData.unshift(itemChatToPushTop)
+        state.scrollToTop = !state.scrollToTop
+        state.conversations = newData
+      }
+    },
 
   },
   // extraReducers: (builder) => {
@@ -170,6 +184,7 @@ export const {
   setHistoryItemFakeComment,
   setNewListComment,
   removeFakeComment,
-  setSearchText
+  setSearchText,
+  setCurrentConversationToTop
 } = conversationSlice.actions;
 export default conversationSlice.reducer;

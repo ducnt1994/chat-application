@@ -7,7 +7,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {IConversationItem} from "../dto";
 import { setConversationList} from "../reducers/conversationSlice";
 import {RootState} from "../store";
-import {alertToast} from "../helper/toast";
 import {message} from "antd";
 
 export default function Home() {

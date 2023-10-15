@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import {IConversationItem} from "../../../../dto";
 import {getConversations} from "../../../../api/conversation";
 import {setConversationList} from "../../../../reducers/conversationSlice";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function ListConversations() {
   // eslint-disable-next-line
@@ -16,7 +16,8 @@ export default function ListConversations() {
     isLoadingConversations,
     conversationPage,
     filters,
-    searchText
+    searchText,
+    scrollToTop
   } = useSelector((state : RootState) => state.conversation)
   const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
   const dispatch = useDispatch();
@@ -28,36 +29,48 @@ export default function ListConversations() {
       filter: filters,
       ...(searchText && {search: searchText})
     });
-    if(!conversations){
+    if(!conversations || conversations.length === 0){
       setHasMoreConversation(false)
     }
     dispatch(setConversationList(conversations))
   }
 
+  console.log(scrollToTop)
+  useEffect(() => {
+    const scrollDom = document.getElementById('left-conversation')
+    console.log(scrollDom)
+    if(scrollDom){
+      scrollDom.scrollTo({top: 0, behavior: 'smooth'})
+    }
+  }, [scrollToTop]);
+
   return (
-    <InfiniteScroll
-      dataLength={conversationPage * 20}
-      next={loadMoreConversation}
-      hasMore={hasMoreConversation}
-      loader={<Spin size={'small'}/>}
-      height={"calc(100vh - 108px)"}
-    >
-      {
-        isLoadingConversations && <div className={`flex items-center h-full justify-center`}>
-          <Spin size="large">
-          </Spin>
-        </div>
-      }
-      {
-        !isLoadingConversations && conversations.length === 0 && <>Không có cuộc hội thoại nào</>
-      }
+    <div id={'left-conversation'}>
+      <InfiniteScroll
+        dataLength={conversationPage * 20}
+        next={loadMoreConversation}
+        hasMore={hasMoreConversation}
+        loader={<Spin size={'small'}/>}
+        height={"calc(100vh - 108px)"}
+      >
+        {
+          isLoadingConversations && <div className={`flex items-center h-full justify-center`}>
+            <Spin size="large">
+            </Spin>
+          </div>
+        }
+        {
+          !isLoadingConversations && conversations.length === 0 && <>Không có cuộc hội thoại nào</>
+        }
 
 
-      {
-        !isLoadingConversations && conversations.length > 0 && conversations.map((conv, key) => {
-          return <ListItemConversation key={key} conversationItem={conv}/>
-        })
-      }
-    </InfiniteScroll>
+        {
+          !isLoadingConversations && conversations.length > 0 && conversations.map((conv, key) => {
+            return <ListItemConversation key={key} conversationItem={conv}/>
+          })
+        }
+      </InfiniteScroll>
+    </div>
+
   )
 }
