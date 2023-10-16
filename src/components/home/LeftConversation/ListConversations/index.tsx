@@ -35,10 +35,8 @@ export default function ListConversations() {
     dispatch(setConversationList(conversations))
   }
 
-  console.log(scrollToTop)
   useEffect(() => {
     const scrollDom = document.getElementById('left-conversation')
-    console.log(scrollDom)
     if(scrollDom){
       scrollDom.scrollTo({top: 0, behavior: 'smooth'})
     }

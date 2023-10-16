@@ -8,6 +8,7 @@ import {IConversationItemLoaded} from "../../../dto";
 export default function TabInformation({conversationItem} : {
   conversationItem: IConversationItemLoaded | undefined
 }) {
+  console.log(conversationItem)
   return (
     <div>
       <div className={`p-3 bg-[#FAFAFA]`}>
@@ -16,12 +17,16 @@ export default function TabInformation({conversationItem} : {
           <Typography className={`text-sm font-bold`}> {conversationItem?.info.customer_info.name} </Typography>
         </div>
         <div className={`mt-2 flex gap-3`}>
-          <div className={`cursor-pointer flex items-center gap-1`}>
-            <div className={`flex items-center mt-[1px]`}>
-              <IconPhone/>
+          {
+            typeof conversationItem?.customerInfor?.phones.length !== 'undefined' &&
+            conversationItem?.customerInfor?.phones.length > 0 && <div className={`cursor-pointer flex items-center gap-1`}>
+              <div className={`flex items-center mt-[1px]`}>
+                <IconPhone/>
+              </div>
+              <div className={`px-1 text-white bg-brand-secondary rounded-xl text-[10px]`}>{conversationItem?.customerInfor?.phones[0]}</div>
             </div>
-            <div className={`px-1 text-white bg-brand-secondary rounded-xl text-[10px]`}>Ad 23854930377910735</div>
-          </div>
+          }
+
           <div className={`flex gap-[2px] items-center`}>
             <IconComment/> 2
           </div>

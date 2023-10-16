@@ -19,7 +19,7 @@ export default function RightConversation() {
     {
       key: '2',
       label: <div className={`flex gap-1 items-center text-xs ${activeTab === '2' ? 'font-semibold text-gray-900' : 'text-gray-500'}`}><div className={`flex items-center`}><IconLead active={activeTab === '2'}/></div><div>Tạo lead</div></div>,
-      children: `Content of Tab Pane 2`,
+      children: ``,
     },
   ];
   const onChange = (activeKey : string) => {
