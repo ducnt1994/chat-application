@@ -13,7 +13,7 @@ export default function Header() {
     {
       id: 2,
       path: '/analyst',
-      name: 'Hội thoại',
+      name: 'Thống kê',
       preIcon: <IconAnalyst/>
     },
     {

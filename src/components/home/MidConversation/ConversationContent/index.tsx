@@ -3,10 +3,18 @@ import ChatContent from "./ChatContent";
 import {IConversationItemLoaded} from "../../../../dto";
 import {Spin} from "antd";
 import {CONVERSATION_TYPE_COMMENT_FB} from "../../../../utils/constants/conversation";
+import {useEffect, useRef} from "react";
 
 export default function ConversationContent({conversationItem} : {
   conversationItem: IConversationItemLoaded | undefined
 }) {
+  const refDom = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if(!conversationItem?.isLoadingItem){
+      refDom?.current?.scrollIntoView({block: 'end', behavior: 'smooth'})
+    }
+  }, [conversationItem?.isLoadingItem]);
   return (
     <>
       {

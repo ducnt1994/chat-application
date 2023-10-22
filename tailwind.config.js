@@ -10,7 +10,7 @@ module.exports = {
         'active-filter' : "#4B5563",
         'conversation-not-read' : "#F0F0F0",
         'conversation-active' : "#DCE7F4",
-        'empty-bg' : "#F0F5FB",
+        'empty-bg' : "#E4DED9",
         'create-chat' : "#F6F6F6",
         'brand-secondary' : '#D53784',
         'bg-chat-page' : '#FFF6DE'

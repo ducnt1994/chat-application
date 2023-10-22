@@ -3,7 +3,6 @@ import {useLocation, useNavigate} from "react-router-dom";
 
 export default function LeftMenu() {
   const location = useLocation();
-  const navigate = useNavigate()
   const listLeftMenu = [
     {
       id: 1,

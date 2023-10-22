@@ -16,13 +16,13 @@ export default function ItemConversationContent({position = 'left', historyItem}
   }
 
   return (
-    <div className={`flex gap-3 ${position === 'left' ? "" : 'flex-row-reverse items-end'} mt-4`}>
+    <div className={`flex gap-3 ${position === 'left' ? "" : 'flex-row-reverse items-end'} mt-1`}>
       {
         historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && <Avatar size={getItemSide() === 'left' ? 42 : 24} url={historyItem?.sender?.avatar || ""}/>
       }
       <div className={`flex-1 ${position === 'left' ? '' : 'flex justify-end'}`}>
         <div>
-          <div className={`max-w-[430px] py-1 px-2 bg-white rounded-md relative text-left w-fit`}>
+          <div className={`max-w-[430px] py-1 px-2 bg-white rounded-md relative text-left w-fit ${position === 'left' ? '' : 'bg-[#FFF6DE]'}`}>
             <div className={`text-[13px] whitespace-pre-line break-words`} dangerouslySetInnerHTML={{__html: historyItem.content}}></div>
             {
               typeof historyItem?.media !== "undefined" && <div className={`flex flex-wrap gap-2 rounded-md`}>
@@ -43,15 +43,15 @@ export default function ItemConversationContent({position = 'left', historyItem}
               </div>
             }
 
-            <div className={`mt-3 flex gap-3 justify-end`}>
-              <div className={'cursor-pointer'}><IconLike/></div>
-              {
-                historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && <div className={'cursor-pointer'}><img alt={''} src={'/icon-fb-chat.png'}/></div>
-              }
-              {
-                historyItem.from_customer !== CONVERSATION_FROM_CUSTOMER && <div className={'cursor-pointer'}><IconDetele/></div>
-              }
-            </div>
+            {/*<div className={`mt-3 flex gap-3 justify-end`}>*/}
+            {/*  <div className={'cursor-pointer'}><IconLike/></div>*/}
+            {/*  {*/}
+            {/*    historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && <div className={'cursor-pointer'}><img alt={''} src={'/icon-fb-chat.png'}/></div>*/}
+            {/*  }*/}
+            {/*  {*/}
+            {/*    historyItem.from_customer !== CONVERSATION_FROM_CUSTOMER && <div className={'cursor-pointer'}><IconDetele/></div>*/}
+            {/*  }*/}
+            {/*</div>*/}
           </div>
           {
             typeof historyItem.is_sending_message && historyItem.is_sending_message && <div className={`text-[10px] text-right text-gray-400`}>Đang gửi...</div>

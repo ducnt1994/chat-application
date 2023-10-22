@@ -102,7 +102,7 @@ export const ItemRender = ({historyItem, borderColorItem} : {
           content={hoverItem}>
           <div
             style={{borderColor: borderColorItem}}
-            className={`max-w-[430px] border-l-4 py-1 px-2 bg-white rounded-md relative text-left w-fit  ${historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'bg-white' : 'bg-bg-chat-page'}`}>
+            className={`max-w-[430px] border-l-4 py-1 px-2 bg-white rounded-md relative text-left w-fit  ${historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'bg-white' : 'bg-[#FFF6DE]'}`}>
             <div className={`text-[13px] whitespace-pre-line break-words`} dangerouslySetInnerHTML={{__html: historyItem.content}}></div>
             {
               typeof historyItem?.media !== "undefined" && <div className={`grid grid-cols-${generateColGridMedia()} gap-2 rounded-md mt-2`}>
