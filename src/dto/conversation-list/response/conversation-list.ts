@@ -22,6 +22,7 @@ export interface IConversationItem {
     social_id: string
   }
   number_new_chat: number
+  note: INoteItem[]
   project_id: string
   status: number
   type: number
@@ -62,4 +63,10 @@ export interface IFilter {
     from: string
     to: string
   },
+}
+
+export interface INoteItem {
+  note: string
+  time: number
+  id: string
 }

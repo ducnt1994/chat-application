@@ -1,19 +1,42 @@
 // import IconLocation from "../../../../assets/svg/MidConversation/IconLocation";
 import IconEye from "../../../../assets/svg/MidConversation/IconEye";
-import IconUser from "../../../../assets/svg/IconUser";
-import IconUpload from "../../../../assets/svg/IconUpload";
+// import IconUser from "../../../../assets/svg/IconUser";
+// import IconUpload from "../../../../assets/svg/IconUpload";
 import IconMail from "../../../../assets/svg/IconMail";
-import IconRedirect from "../../../../assets/svg/IconRedirect";
+// import IconRedirect from "../../../../assets/svg/IconRedirect";
 // import IconBirthDay from "../../../../assets/svg/MidConversation/IconBirthDay";
 // import IconFemale from "../../../../assets/svg/MidConversation/IconFemale";
 import Avatar from "../../../shared/Avatar";
 import {IConversationItemLoaded} from "../../../../dto";
-import {Skeleton} from "antd";
+import {message, Skeleton, Tooltip} from "antd";
 import {CONVERSATION_NOT_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import moment from "moment";
+import {CONVERSATION_IS_NOT_READ, CONVERSATION_IS_READ} from "../../../../utils/constants/conversation";
+import {confirmUnread} from "../../../../api/conversation";
+import {markStatusReadConversation} from "../../../../reducers/conversationSlice";
+import Cookies from "js-cookie";
+import {useDispatch} from "react-redux";
 export default function Header({conversationItem} : {
   conversationItem: IConversationItemLoaded | undefined
 }) {
+  const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
+  const dispatch = useDispatch()
+  const handleMarkingUnread = async () => {
+    if(conversationItem?.info.is_read === CONVERSATION_IS_READ){
+      try {
+        const res : any = await confirmUnread(conversationItem.info._id, {
+          project_id: userInfor.last_project_active
+        });
+        if(res && res.status){
+          dispatch(markStatusReadConversation({conversationId: conversationItem.info._id, statusRead: CONVERSATION_IS_NOT_READ}))
+          message.success('Đánh dấu chưa đọc thành công')
+        }
+      } catch (e) {
+        message.error('Đánh dấu đã đọc không thành công. Vui lòng thử lại sau ít phút!!!')
+      }
+    }
+  }
+
   return (
     <>
       {
@@ -45,10 +68,14 @@ export default function Header({conversationItem} : {
               </div>
             </div>
             <div className={`flex gap-2 items-center`}>
-              <div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconUser/></div>
-              <div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconUpload/></div>
-              <div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconMail/></div>
-              <div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconRedirect/></div>
+              {/*<div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconUser/></div>*/}
+              {/*<div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconUpload/></div>*/}
+              {
+                conversationItem.info.is_read === CONVERSATION_IS_READ && <Tooltip placement={'bottom'} title={'Đánh dấu chưa đọc'}>
+                  <div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`} onClick={handleMarkingUnread}><IconMail/></div>
+                </Tooltip>
+              }
+              {/*<div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconRedirect/></div>*/}
             </div>
 
           </div>

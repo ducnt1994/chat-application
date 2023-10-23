@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {IConversationItem, IConversationItemLoaded, IFilter} from "../dto";
+import {IConversationItem, IConversationItemLoaded, IFilter, INoteItem} from "../dto";
 import {IHistoryChat} from "../dto/conversation-list/response/history-chat";
+import {CONVERSATION_IS_READ} from "../utils/constants/conversation";
 
 interface IInitialState {
   conversations: IConversationItem[] | [];
@@ -64,7 +65,7 @@ export const conversationSlice = createSlice({
         state.conversationListLoaded.push({
           conversationId: action.payload.id,
           info: conversationItemClicked,
-          chatHistory: {},
+          chatHistory: [],
           customerInfor:  conversationItemClicked.customer_info,
           isLoadingItem: true
         })
@@ -153,7 +154,6 @@ export const conversationSlice = createSlice({
     setCurrentConversationToTop(state: any){
       const conversationLoadedIndex = state.conversations.findIndex((item : IConversationItem) => item._id === state.activeConversationId);
       if(conversationLoadedIndex !== false){
-        console.log({conversationLoadedIndex})
         const newData = [...state.conversations]
         const itemChatToPushTop = newData[conversationLoadedIndex];
         newData.splice(conversationLoadedIndex,1)
@@ -162,7 +162,50 @@ export const conversationSlice = createSlice({
         state.conversations = newData
       }
     },
+    markStatusReadConversation(state: any, action: PayloadAction<{conversationId: string, statusRead: number}>){
+      const conversationIndex = state.conversations.findIndex((item : IConversationItem) => item._id === action.payload.conversationId);
+      if(conversationIndex !== false){
+        const newData = [...state.conversations]
+        const itemChatToMarkRead : IConversationItem = newData[conversationIndex];
+        itemChatToMarkRead.is_read = action.payload.statusRead;
+        // đánh dấu thêm chat = 1 nếu đánh dấu chưa đọc
+        itemChatToMarkRead.number_new_chat = action.payload.statusRead === CONVERSATION_IS_READ ? 0 : 1;
+        newData.splice(conversationIndex, 1, itemChatToMarkRead)
+        state.conversations = newData;
+      }
 
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversationId);
+      if(conversationLoadedIndex !== false){
+        const newData = [...state.conversationListLoaded]
+        const itemChatToMarkRead : IConversationItemLoaded = newData[conversationLoadedIndex];
+        itemChatToMarkRead.info.is_read = action.payload.statusRead
+      }
+    },
+    addNoteData(state: any, action : PayloadAction<{conversationId : string, noteItem : INoteItem}>){
+      if(action.payload.conversationId && action.payload.noteItem.id){
+        const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversationId);
+        if(conversationLoadedIndex !== false){
+          const newData = [...state.conversationListLoaded]
+          const itemChatToAddNote : IConversationItemLoaded = newData[conversationLoadedIndex];
+          if(typeof itemChatToAddNote.info.note !== 'undefined'){
+            itemChatToAddNote.info.note.unshift(action.payload.noteItem)
+          } else {
+            itemChatToAddNote.info.note = [action.payload.noteItem]
+          }
+        }
+      }
+    },
+    removeNoteData(state: any, action : PayloadAction<{conversationId : string, fakeNoteId: string}>){
+      if(action.payload.conversationId && action.payload.fakeNoteId){
+        const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversationId);
+        if(conversationLoadedIndex !== false){
+          const newData = [...state.conversationListLoaded]
+          const itemChatToAddNote : IConversationItemLoaded = newData[conversationLoadedIndex];
+          const fakeNoteIndex = itemChatToAddNote.info.note.findIndex((item: INoteItem) => typeof item.id !== 'undefined' && item.id === action.payload.fakeNoteId)
+          itemChatToAddNote.info.note.splice(fakeNoteIndex, 1)
+        }
+      }
+    }
   },
   // extraReducers: (builder) => {
   //   builder.addCase(fetchOneConversation.fulfilled, (state, action) => {
@@ -185,6 +228,9 @@ export const {
   setNewListComment,
   removeFakeComment,
   setSearchText,
-  setCurrentConversationToTop
+  setCurrentConversationToTop,
+  markStatusReadConversation,
+  addNoteData,
+  removeNoteData
 } = conversationSlice.actions;
 export default conversationSlice.reducer;

@@ -30,7 +30,7 @@ export default function Header() {
           </div>
           {
             headerList.map((item, key) => {
-              return <NavItem path={item.path} preIcon={item.preIcon} title={item.name}/>
+              return <NavItem key={key} path={item.path} preIcon={item.preIcon} title={item.name}/>
             })
           }
         </div>

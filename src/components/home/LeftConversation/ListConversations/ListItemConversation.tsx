@@ -5,16 +5,25 @@ import IconReply from "../../../../assets/svg/LeftConversation/IconReply";
 // import Tag from "../../../shared/Tag";
 import Avatar from "../../../shared/Avatar";
 import {IConversationItem} from "../../../../dto";
-import {CONVERSATION_IS_NOT_READ, CONVERSATION_TYPE_CHAT_FB} from "../../../../utils/constants/conversation";
+import {
+  CONVERSATION_IS_NOT_READ,
+  CONVERSATION_IS_READ,
+  CONVERSATION_TYPE_CHAT_FB
+} from "../../../../utils/constants/conversation";
 import IconComment from "../../../../assets/svg/IconComment";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
-import {setActiveConversationId, setHistoryChat, setLoadingHistoryConversation} from "../../../../reducers/conversationSlice";
+import {
+  markStatusReadConversation,
+  setActiveConversationId,
+  setHistoryChat,
+  setLoadingHistoryConversation
+} from "../../../../reducers/conversationSlice";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import moment from "moment";
 import Cookies from "js-cookie";
-import {getConversationChats, getConversationComments} from "../../../../api/conversation";
-import {Tooltip, Avatar as Avt} from "antd";
+import {confirmRead, getConversationChats, getConversationComments} from "../../../../api/conversation";
+import {Tooltip, Avatar as Avt, message} from "antd";
 
 export default function ListItemConversation({conversationItem} : {
   conversationItem: IConversationItem
@@ -32,9 +41,26 @@ export default function ListItemConversation({conversationItem} : {
       return conversationItem.last_chat.content.substring(0,18) + (conversationItem.last_chat.content.length > 18 ? '...' : '')
     }
   }
+  const handleMarkingReadConversation = async () => {
+    if(conversationItem.is_read === CONVERSATION_IS_NOT_READ){
+      try {
+        const res : any = await confirmRead(conversationItem._id, {
+          project_id: userInfor.last_project_active
+        });
+        if(res && res.status){
+          dispatch(markStatusReadConversation({conversationId: conversationItem._id, statusRead: CONVERSATION_IS_READ}))
+        }
+      } catch (e) {
+        message.error('Đánh dấu đã đọc không thành công. Vui lòng thử lại sau ít phút!!!')
+      }
+    }
+  }
 
   const handleClickItem = async () => {
     dispatch(setActiveConversationId({id: conversationItem._id}))
+    //mark-read if not read
+    handleMarkingReadConversation()
+
     const checkExistConversationLoaded = conversationListLoaded.find(item => conversationItem._id === item.conversationId)
     if(!checkExistConversationLoaded || !checkExistConversationLoaded.chatHistory){
       dispatch(setLoadingHistoryConversation({conversationId: conversationItem._id}))

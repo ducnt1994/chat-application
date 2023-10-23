@@ -29,7 +29,11 @@ export default function ItemConversationContentComment({historyItem} : {
       <ItemRender historyItem={historyItem} borderColorItem={colorForItem}/>
       {
         typeof historyItem.children !== "undefined" && historyItem.children.map((item, key) => {
-          return <ItemRender historyItem={item} key={key} borderColorItem={colorForItem}/>
+          return <ItemRender
+            historyItem={item}
+            key={key}
+            borderColorItem={colorForItem}
+          />
         })
       }
     </>
@@ -101,8 +105,8 @@ export const ItemRender = ({historyItem, borderColorItem} : {
           placement={historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'rightTop' : 'leftTop'}
           content={hoverItem}>
           <div
-            style={{borderColor: borderColorItem}}
-            className={`max-w-[430px] border-l-4 py-1 px-2 bg-white rounded-md relative text-left w-fit  ${historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'bg-white' : 'bg-[#FFF6DE]'}`}>
+            style={{borderColor: borderColorItem, background: historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'white' : '#FFF6DE'}}
+            className={`max-w-[430px] border-l-4 py-1 px-2 bg-white rounded-md relative text-left w-fit`} >
             <div className={`text-[13px] whitespace-pre-line break-words`} dangerouslySetInnerHTML={{__html: historyItem.content}}></div>
             {
               typeof historyItem?.media !== "undefined" && <div className={`grid grid-cols-${generateColGridMedia()} gap-2 rounded-md mt-2`}>

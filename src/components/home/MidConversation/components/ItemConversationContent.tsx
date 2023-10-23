@@ -1,5 +1,5 @@
-import IconLike from "../../../../assets/svg/MidConversation/ItemChat/IconLike";
-import IconDetele from "../../../../assets/svg/MidConversation/ItemChat/IconDetele";
+// import IconLike from "../../../../assets/svg/MidConversation/ItemChat/IconLike";
+// import IconDetele from "../../../../assets/svg/MidConversation/ItemChat/IconDetele";
 import Avatar from "../../../shared/Avatar";
 import {IHistoryChat, IMediaItem} from "../../../../dto/conversation-list/response/history-chat";
 import {Image} from "antd";
@@ -7,22 +7,22 @@ import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import {IMAGE_ERROR} from "../../../../utils/constants/conversation";
 
 
-export default function ItemConversationContent({position = 'left', historyItem} : {
+export default function ItemConversationContent({position = 'left', historyItem, isSameSender} : {
   position: 'left' | 'right'
   historyItem: IHistoryChat
+  isSameSender?: boolean
 }) {
   function getItemSide(){
     return historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'left' : 'right'
   }
-
   return (
-    <div className={`flex gap-3 ${position === 'left' ? "" : 'flex-row-reverse items-end'} mt-1`}>
+    <div className={`flex gap-2 ${position === 'left' ? "" : 'flex-row-reverse items-end'} mt-1`}>
       {
-        historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && <Avatar size={getItemSide() === 'left' ? 42 : 24} url={historyItem?.sender?.avatar || ""}/>
+        historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && <Avatar hidden={isSameSender} size={getItemSide() === 'left' ? 35 : 24} url={historyItem?.sender?.avatar || ""}/>
       }
       <div className={`flex-1 ${position === 'left' ? '' : 'flex justify-end'}`}>
         <div>
-          <div className={`max-w-[430px] py-1 px-2 bg-white rounded-md relative text-left w-fit ${position === 'left' ? '' : 'bg-[#FFF6DE]'}`}>
+          <div className={`max-w-[430px] py-1 px-2 bg-white rounded-md relative text-left w-fit`} style={{background: position === 'left' ? '' : '#FFF6DE'}}>
             <div className={`text-[13px] whitespace-pre-line break-words`} dangerouslySetInnerHTML={{__html: historyItem.content}}></div>
             {
               typeof historyItem?.media !== "undefined" && <div className={`flex flex-wrap gap-2 rounded-md`}>

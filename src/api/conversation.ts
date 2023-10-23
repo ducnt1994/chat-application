@@ -56,21 +56,21 @@ export const sendChat = async (conversationId: string, data = {}): Promise<IHist
   return res.data.data;
 };
 //
-// /**
-//  * @param {string} conversationId
-//  * @param {{project_id: string}} data
-//  * @returns
-//  */
-// export const confirmRead = async (conversationId, data = {}) => {
-//   const uri = `projects/bot-chat/conversations/${conversationId}/markRead`;
-//   const res = await API.post(uri, data);
-//   return res.data;
-// };
-// export const confirmUnread = async (conversationId, data = {}) => {
-//   const uri = `projects/bot-chat/conversations/${conversationId}/mark-unread`;
-//   const res = await API.post(uri, data);
-//   return res.data;
-// };
+/**
+ * @param {string} conversationId
+ * @param {{project_id: string}} data
+ * @returns
+ */
+export const confirmRead = async (conversationId: string, data = {}): Promise<any> => {
+  const uri = `projects/bot-chat/conversations/${conversationId}/mark-read`;
+  const res = await API.post(uri, data);
+  return res.data;
+};
+export const confirmUnread = async (conversationId: string, data = {}) => {
+  const uri = `projects/bot-chat/conversations/${conversationId}/mark-unread`;
+  const res = await API.post(uri, data);
+  return res.data;
+};
 //
 // /**
 //  * @param {project_id: string} project_id
@@ -104,16 +104,16 @@ export const sendComment = async (conversationId : string, data = {}) => {
   return res.data.data;
 };
 //
-// /**
-//  * @param {string} conversationId
-//  * @param {{project_id: string, content: string, image: string}} data
-//  * @returns
-//  */
-// export const addNoteConversation = async (conversationId, data = {}) => {
-//   const uri = `/projects/bot-chat/conversations/${conversationId}/add-note`;
-//   const res = await API.post(uri, data);
-//   return res.data;
-// };
+/**
+ * @param {string} conversationId
+ * @param {{project_id: string, content: string, image: string}} data
+ * @returns
+ */
+export const addNoteConversation = async (conversationId: string, data = {}) => {
+  const uri = `/projects/bot-chat/conversations/${conversationId}/add-note`;
+  const res = await API.post(uri, data);
+  return res.data;
+};
 //
 // export const getAllTag = async (projectId, data) => {
 //   const uri = `projects/${projectId}/tags/list`;

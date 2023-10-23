@@ -1,5 +1,5 @@
 import IconConversationScript from "../assets/svg/LeftMenuSetting/IconConversationScript";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 
 export default function LeftMenu() {
   const location = useLocation();

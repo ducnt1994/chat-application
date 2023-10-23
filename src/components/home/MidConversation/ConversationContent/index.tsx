@@ -11,10 +11,12 @@ export default function ConversationContent({conversationItem} : {
   const refDom = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if(!conversationItem?.isLoadingItem){
-      refDom?.current?.scrollIntoView({block: 'end', behavior: 'smooth'})
+    if(typeof conversationItem !== 'undefined' && conversationItem?.chatHistory.length > 0){
+      setTimeout(() => {
+        refDom.current?.scrollIntoView({ behavior: 'smooth', block: 'end'})
+      }, 500)
     }
-  }, [conversationItem?.isLoadingItem]);
+  }, [conversationItem]);
   return (
     <>
       {
@@ -31,6 +33,7 @@ export default function ConversationContent({conversationItem} : {
               <ChatContent conversationItem={conversationItem}/>
             )
           }
+          <div id={'chat-content'} ref={refDom} />
         </div>
       }
     </>
