@@ -216,12 +216,6 @@ export default function CreateChat({conversationItem} : {
       fake_id: moment().unix() + userInfor.last_project_active,
       ...(media && media.length > 0 && {media})
     }
-    // let findOneHistoryItemFromPage = conversationItem?.chatHistory.find((item) => item.from_customer === CONVERSATION_NOT_FROM_CUSTOMER)
-    // if(findOneHistoryItemFromPage){
-    //   const fakeData = {...findOneHistoryItemFromPage};
-    //   fakeData.created_at = moment().utc().format()
-    //   return fakeData
-    // }
   }
   
   const handleSelectFileFromLocal = (fileList : ItemFile[]) => {

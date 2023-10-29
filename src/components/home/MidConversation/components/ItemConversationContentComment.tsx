@@ -9,7 +9,6 @@ import {IMAGE_ERROR} from "../../../../utils/constants/conversation";
 import {getRandomColor} from "../../../../helper/color";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import moment from "moment";
-// import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
 import {setCommentToReply} from "../../../../reducers/conversationSlice";

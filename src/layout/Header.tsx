@@ -18,7 +18,7 @@ export default function Header() {
     },
     {
       id: 3,
-      path: '/setting',
+      path: '/setting/conversation-script',
       name: 'Cài đặt',
       preIcon: <IconSetting/>
     }

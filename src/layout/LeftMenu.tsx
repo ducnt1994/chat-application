@@ -11,7 +11,7 @@ export default function LeftMenu() {
     }
   ]
   return (
-    <div className={`w-[280px] h-max-screen bg-white pt-4`}>
+    <div className={`w-[250px] 2xl:w-[280px] h-max-screen bg-white pt-4`}>
       {
         listLeftMenu.map((item, key) => {
           return <div key={key} className={`flex ${location.pathname === item.path ? "bg-gray-100 font-medium" : ""} gap-2 items-center py-4 px-7 hover:bg-gray-100 hover:font-medium text-base cursor-pointer`}>
