@@ -254,7 +254,7 @@ export default function CreateChat({conversationItem} : {
   }, [activeConversationId]);
 
   return (
-    <div className={`bg-create-chat p-3 text-left`}>
+    <div className={`bg-create-chat px-1 py-2 text-left`}>
       <FileUploadPreview
         handleRemoveFileUpload={(index: number) => handleRemoveFileUpload(index)}
         fileListSelected={fileListSelected}/>

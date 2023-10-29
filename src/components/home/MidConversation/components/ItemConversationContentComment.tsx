@@ -4,7 +4,7 @@ import IconComment from "../../../../assets/svg/MidConversation/ItemChat/IconCom
 import IconDetele from "../../../../assets/svg/MidConversation/ItemChat/IconDetele";
 import Avatar from "../../../shared/Avatar";
 import {IHistoryChat, IMediaItem} from "../../../../dto/conversation-list/response/history-chat";
-import {Image, Checkbox, Typography, Popover} from "antd";
+import {Image, Checkbox, Typography, Popover, Tooltip} from "antd";
 import {IMAGE_ERROR} from "../../../../utils/constants/conversation";
 import {getRandomColor} from "../../../../helper/color";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
@@ -96,7 +96,9 @@ export const ItemRender = ({historyItem, borderColorItem} : {
   return (
     <div className={`flex gap-3 ${getItemSide() === 'left' ? "" : 'flex-row-reverse items-end'} mt-4`}>
       {
-        historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && <Avatar size={getItemSide() === 'left' ? 42 : 24} url={historyItem.sender.avatar || ""}/>
+        historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && <Tooltip placement={'top'} title={historyItem?.sender?.name} trigger={'hover'}>
+          <div><Avatar size={getItemSide() === 'left' ? 42 : 24} url={historyItem.sender.avatar || ""}/></div>
+        </Tooltip>
       }
       <div className={`${getItemSide() === 'left' ? '' : 'flex justify-end'}`}>
         <Popover

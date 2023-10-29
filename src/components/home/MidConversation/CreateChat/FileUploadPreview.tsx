@@ -8,7 +8,7 @@ export default function FileUploadPreview({fileListSelected, handleRemoveFileUpl
   handleRemoveFileUpload: (index : number) => void
 }) {
   return (
-    <div className={'flex gap-3 mb-3 flex-wrap'}>
+    <div className={'flex gap-3 mb-1 flex-wrap'}>
       {fileListSelected.map((x, i) =>
         <div key={i} className={`relative`}>
           <div className={`w-[55px] rounded-md h-[55px] border border-gray-200 flex items-center justify-center relative bg-white`}>
