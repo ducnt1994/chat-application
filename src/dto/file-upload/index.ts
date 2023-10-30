@@ -1,7 +1,7 @@
 export interface ItemFile {
   name: string
   url: string
-  file: any
+  file?: any
 }
 export interface FileUpload {
   

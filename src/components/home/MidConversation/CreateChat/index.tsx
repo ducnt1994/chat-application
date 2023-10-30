@@ -1,4 +1,4 @@
-import {Input, message, Typography} from 'antd';
+import {Input, message, Popover, Tooltip, Typography} from 'antd';
 import {useEffect, useState} from "react";
 import IconAddSampleReply from "../../../../assets/svg/MidConversation/CreateChat/IconAddSampleReply";
 import IconSend from "../../../../assets/svg/MidConversation/CreateChat/IconSend";
@@ -15,6 +15,7 @@ import {
   setHistoryItemFakeComment, setNewListComment
 } from "../../../../reducers/conversationSlice";
 import UploadFile from "./UploadFile";
+import styles from "./custom-upload-file.module.scss"
 import {
   CONVERSATION_IS_NOT_HIDE,
   CONVERSATION_IS_NOT_LIKE,
@@ -27,6 +28,8 @@ import {RootState} from "../../../../store";
 import {IHistoryChat, IMediaItem} from "../../../../dto/conversation-list/response/history-chat";
 import FileUploadPreview from "./FileUploadPreview";
 import {uploadImage} from "../../../../api/uploadFile";
+import {ReplySamples} from "./ReplySamples";
+import {IReplySampleItem} from "../../../../dto/reply-sample";
 
 const { TextArea } = Input;
 export default function CreateChat({conversationItem} : {
@@ -39,6 +42,7 @@ export default function CreateChat({conversationItem} : {
   const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
   const {selectedCommentIdToReply, activeConversationId} = useSelector((state: RootState) => state.conversation)
   const [fileListSelected, setFileListSelected] = useState<ItemFile[]>([])
+  const [openReplySampleComp, setOpenReplySampleComp] = useState(false)
 
   const handleSendMessage = async () => {
     if(conversationItem?.info.type === CONVERSATION_TYPE_CHAT_FB){
@@ -62,9 +66,15 @@ export default function CreateChat({conversationItem} : {
     }
     if(fileListSelected.length > 0){
       await Promise.all(fileListSelected.map(async (file) => {
-        const imageUrl = await handleUploadImage(file.file)
-        media.url = imageUrl;
-        media.name = imageUrl;
+        if(file.file){
+          const imageUrl = await handleUploadImage(file.file)
+          media.url = imageUrl;
+          media.name = imageUrl;
+        } else {
+          media.url = file.url;
+          media.name = file.name;
+        }
+
       }))
     }
 
@@ -102,9 +112,11 @@ export default function CreateChat({conversationItem} : {
         setIsSendMessageSuccess(true)
         dispatch(setCommentToReply(''))
       }
+      handleResetData()
     } catch (e) {
       setIsSendMessageSuccess(false)
       dispatch(removeFakeComment(fakeData))
+      handleResetData()
     }
   }
 
@@ -173,8 +185,12 @@ export default function CreateChat({conversationItem} : {
     let imageSend : string[] = []
     if(fileListSelected.length > 0){
       await Promise.all(fileListSelected.map(async (file) => {
-        const imageUrl = await handleUploadImage(file.file)
-        imageSend.push(imageUrl)
+        if(file.file){
+          const imageUrl = await handleUploadImage(file.file)
+          imageSend.push(imageUrl)
+        } else {
+          imageSend.push(file.url)
+        }
       }))
       if(imageSend.length > 0){
         data.images = imageSend
@@ -189,9 +205,18 @@ export default function CreateChat({conversationItem} : {
         historyItem: sendMessage
       }))
       setIsSendMessageSuccess(true)
+      handleResetData()
     } catch (e) {
       setIsSendMessageFail(true)
+      handleResetData()
     }
+  }
+
+  const handleResetData = () => {
+    setTimeout(() => {
+      setValue('')
+      setFileListSelected([])
+    },50)
   }
   
   const generateFakeData = (media: IMediaItem[]) => {
@@ -230,6 +255,23 @@ export default function CreateChat({conversationItem} : {
     setFileListSelected(newListFile);
   }
 
+  const handleSelectSample = (item: IReplySampleItem) => {
+    if(item.medias.length > 0){
+      const arrFile = item.medias.map((file) => {
+        return {
+          name: file,
+          url: file,
+          file: null
+        }
+      })
+      let newFileListSelected = [...fileListSelected]
+      newFileListSelected = newFileListSelected.concat(arrFile)
+      setFileListSelected(newFileListSelected)
+    }
+    setValue(item.content)
+    setOpenReplySampleComp(false)
+  }
+
   useEffect(() => {
     if(isSendMessageSuccess){
       setTimeout(() => {
@@ -257,6 +299,11 @@ export default function CreateChat({conversationItem} : {
         onChange={(e) => setValue(e.target.value)}
         placeholder="Nhập nội dung tin nhắn"
         autoSize={{ minRows: 2, maxRows: 4 }}
+        onPressEnter={(evt) => {
+          if(!evt.shiftKey){
+            handleSendMessage()
+          }
+        }}
         allowClear
       />
 
@@ -270,11 +317,26 @@ export default function CreateChat({conversationItem} : {
           }
         </div>
         <div className={`flex gap-3`}>
-          <UploadFile
-            handleSelectFileFromLocal={(itemList: ItemFile[]) => handleSelectFileFromLocal(itemList)}
-            conversationItem={conversationItem}
-          />
-          <div className={`cursor-pointer`}><IconAddSampleReply/></div>
+          <div className={`relative`}>
+            <UploadFile
+              handleSelectFileFromLocal={(itemList: ItemFile[]) => handleSelectFileFromLocal(itemList)}
+              conversationItem={conversationItem}
+            />
+            {
+              fileListSelected.length > 0 && <div className={`w-[10px] h-[10px] absolute top-0 -right-1 bg-red-600 rounded-full`}></div>
+            }
+          </div>
+
+
+          <Popover
+            open={openReplySampleComp}
+            placement={'top'}
+            overlayClassName={`${styles.CustomUpload}`}
+            trigger={'click'} title={<ReplySamples handleSelectSample={(item: IReplySampleItem) => handleSelectSample(item)}/>} zIndex={10}>
+            <Tooltip title={'Câu trả lời mẫu'} placement={'bottom'} zIndex={9}>
+              <div className={`cursor-pointer`} onClick={() => setOpenReplySampleComp(!openReplySampleComp)}><IconAddSampleReply/></div>
+            </Tooltip>
+          </Popover>
           <div className={`cursor-pointer`} onClick={handleSendMessage}><IconSend/></div>
         </div>
       </div>

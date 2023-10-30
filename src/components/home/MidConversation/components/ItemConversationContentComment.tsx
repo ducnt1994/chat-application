@@ -112,7 +112,7 @@ export const ItemRender = ({historyItem, borderColorItem} : {
             {
               typeof historyItem?.media !== "undefined" && <div className={`grid grid-cols-${generateColGridMedia()} gap-2 rounded-md mt-2`}>
                 {
-                  typeof  historyItem?.media !== "undefined" && <div><Image
+                  typeof  historyItem?.media !== "undefined" && <div className={`${styles.PopoverCustom}`}><Image
                     className={`max-w-[128px] max-h-[128px]`}
                     alt={'avatar'}
                     fallback={IMAGE_ERROR}

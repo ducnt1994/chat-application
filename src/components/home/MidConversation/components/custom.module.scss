@@ -8,5 +8,12 @@
     .ant-popover-arrow{
       display: none;
     }
+    .ant-image {
+      width: 128px!important;
+      height: 128px!important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 }

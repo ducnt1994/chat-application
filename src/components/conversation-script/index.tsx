@@ -1,18 +1,16 @@
 import {Typography} from "antd";
 import Topic from "./topic";
 import {useEffect, useState} from "react";
-import {IReplyTopicItem} from "../../dto/reply-topic";
 import Cookies from "js-cookie";
 import {loadListReplySample, loadListTopic} from "../../api/conversationScript";
 import {Note} from "./note";
 import ReplySample from "./replySample";
-import {IReplySampleItem} from "../../dto/reply-sample";
+import {useDispatch} from "react-redux";
+import {setReplySamples, setReplyTopics} from "../../reducers/conversationScriptSlice";
 
 export default function ConversationScript() {
-  const [topics, setTopics] = useState<IReplyTopicItem[] | undefined>()
+  const dispatch = useDispatch()
   const [loadingTopic, setLoadingTopic] = useState(true)
-
-  const [repSamples, setRepSample] = useState<IReplySampleItem[] | undefined>()
   const [loadingSample, setLoadingSample] = useState(true)
 
   const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
@@ -20,10 +18,10 @@ export default function ConversationScript() {
   const getListTopic = async () => {
     try {
       const listTopic = await loadListTopic(userInfor?.last_project_active as string);
-      setTopics(listTopic)
+      dispatch(setReplyTopics(listTopic))
       setLoadingTopic(false)
     } catch (e) {
-      setTopics(undefined)
+      dispatch(setReplyTopics(undefined))
       setLoadingTopic(false)
     }
   }
@@ -31,10 +29,10 @@ export default function ConversationScript() {
   const getListRepSample = async () => {
     try {
       const listReply = await loadListReplySample(userInfor?.last_project_active as string);
-      setRepSample(listReply)
+      dispatch(setReplySamples(listReply))
       setLoadingSample(false)
     } catch (e) {
-      setRepSample(undefined)
+      dispatch(setReplySamples(undefined))
       setLoadingSample(false)
     }
   }
@@ -52,11 +50,11 @@ export default function ConversationScript() {
       <Typography className={`text-2xl`}>Mẫu câu trả lời nhanh</Typography>
       <div className={`mt-6 flex gap-4`}>
         <div className={`w-[356px]`}>
-          <Topic topics={topics} setTopics={(newList : IReplyTopicItem[]) => setTopics(newList)} loadingTopic={loadingTopic}/>
+          <Topic loadingTopic={loadingTopic}/>
           <Note/>
         </div>
         <div className={`flex-1`}>
-          <ReplySample listSamples={repSamples} setRepSample={(list : IReplySampleItem[]) => setRepSample(list)} loadingSample={loadingSample} topics={topics}/>
+          <ReplySample loadingSample={loadingSample}/>
         </div>
       </div>
     </div>

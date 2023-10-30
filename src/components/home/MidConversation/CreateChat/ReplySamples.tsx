@@ -1,20 +1,16 @@
-import ItemContent from "../../shared/ItemContent";
-import {IconPlus, IconReply} from "../../../assets/svg/ConversationScript/IconConersationScript";
-import {IReplySampleItem} from "../../../dto/reply-sample";
-import {Image, Spin, Table, Tooltip, Typography} from "antd";
+import {Image, Space, Table, Tooltip, Typography} from "antd";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../../store";
 import {ColumnsType} from "antd/es/table";
-import {IMAGE_ERROR} from "../../../utils/constants/conversation";
-import {lazy, Suspense, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {setReplySamples} from "../../../reducers/conversationScriptSlice";
-import {RootState} from "../../../store";
+import {IReplySampleItem} from "../../../../dto/reply-sample";
+import {IMAGE_ERROR} from "../../../../utils/constants/conversation";
+import styles from "./custom-table.module.scss"
 
-export default function ReplySample({ loadingSample} : {
-  loadingSample: boolean
+export function ReplySamples({handleSelectSample} : {
+  handleSelectSample: (item: IReplySampleItem) => void
 }) {
   const {replySamples, replyTopics} = useSelector((state : RootState) => state.conversationScript)
-  const dispatch = useDispatch()
-  const [openModalAdd, setOpenModalAdd] = useState(false)
+
   function getTopicInfo(topicId: string) {
     const indexTopic = replyTopics?.findIndex((item) => item._id === topicId)
     if(indexTopic !== undefined && indexTopic >= 0){
@@ -23,12 +19,14 @@ export default function ReplySample({ loadingSample} : {
         color: replyTopics ? replyTopics[indexTopic].color : 'red'
       }
     }
-    return null
+    return {
+      name: '',
+      color: ''
+    }
   }
-
   const columns: ColumnsType<IReplySampleItem> = [
     {
-      title: <Typography className={`text-xs`}>STT</Typography>,
+      title: <Typography className={`text-xs`}></Typography>,
       dataIndex: 'position',
       key: 'position',
       width: '10%'
@@ -39,7 +37,7 @@ export default function ReplySample({ loadingSample} : {
       key: 'shortcut',
       width: '15%',
       render: (shortcut: string) => {
-        return <Tooltip placement={'top'} title={shortcut}><div>{
+        return <Tooltip placement={'top'} title={shortcut}><div className={`p-0`}>{
           typeof shortcut !== 'undefined'
             ? shortcut.length > 8
               ? shortcut.substring(0,5) + '...'
@@ -54,10 +52,11 @@ export default function ReplySample({ loadingSample} : {
       key: 'reply_topic_id',
       width: '20%',
       render: (replyTopicId: string) => {
-        return getTopicInfo(replyTopicId) && <div className={`text-white font-bold text-xs px-2 py-1 rounded-lg text-center max-w-[100px]`}
-                    style={{backgroundColor: `${getTopicInfo(replyTopicId)?.color}`}}>
-          {getTopicInfo(replyTopicId)?.name}
-        </div>
+        return getTopicInfo(replyTopicId) && <Tooltip placement={'top'} title={getTopicInfo(replyTopicId)?.name || ""}>
+          <div className={`text-white font-semibold text-xs px-2 py-1 rounded-lg text-center max-w-[100px]`}
+                                                  style={{backgroundColor: `${getTopicInfo(replyTopicId)?.color}`}}>
+          {getTopicInfo(replyTopicId)?.name.length > 7 ? getTopicInfo(replyTopicId)?.name.substring(0,4) + '...' : getTopicInfo(replyTopicId)?.name}
+        </div></Tooltip>
       }
     },
     {
@@ -114,52 +113,34 @@ export default function ReplySample({ loadingSample} : {
       ),
     },
   ];
-  const genTableReply = () => {
-    if(loadingSample){
-      return <div className={`flex items-center h-full justify-center`}>
-        <Spin size="large">
-        </Spin>
-      </div>
-    } else {
-      if(replySamples === undefined){
-        return <>Không tồn tại câu trả lời mẫu</>
-      } else if (replySamples.length === 0){
-        return <div className={`flex justify-center text-sm font-semibold`}>Chưa có câu trả lời mẫu</div>
-      } else {
-        return <div className={`flex flex-col max-h-[800px] gap-2 overflow-auto`}>
-          {
-            replySamples && replySamples.length > 0 && <Table rowKey={({ _id }) => _id} columns={columns} dataSource={replySamples} />
-          }
-        </div>
-      }
-    }
-  }
-
-  const handleCreateReplySample = (item: IReplySampleItem) => {
-    const newListSample = [...replySamples || []]
-    newListSample.push(item)
-    dispatch(setReplySamples(newListSample))
-    setOpenModalAdd(false)
-  }
-  
   return (
-    <div>
-      <ItemContent
-        childContent={genTableReply()}
-        iconTitle={<IconReply/>}
-        title={'Mẫu câu trả lời nhanh'}
-        iconExtra={<div className={`cursor-pointer`} onClick={() => setOpenModalAdd(true)}>
-          <IconPlus/>
-        </div>}
-      />
-      <Suspense>
-        <ModalAddNewSample
-          open={openModalAdd}
-          handleClose={() => setOpenModalAdd(false)}
-          handleConfirm={(item: IReplySampleItem) => handleCreateReplySample(item)}/>
-      </Suspense>
-    </div>
+    <Space>
+      {
+        !replySamples && <Space>
+          <Typography className={`text-sm font-bold text-black`}>Chưa cài đặt câu trả lời mẫu</Typography>
+        </Space>
+      }
+      <Space className={`flex flex-col gap-2 ${styles.CustomTable}`}>
+        {
+          replySamples && <Table
+            scroll={{y: 200}}
+            pagination={false}
+            className={`max-h-[300px] w-[550px]`}
+            columns={columns}
+            dataSource={replySamples}
+            rowKey={({ _id }) => _id}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  handleSelectSample(record)
+                }, // click row
+              };
+            }}
+          />
+        }
+      </Space>
+
+
+    </Space>
   )
 }
-
-const ModalAddNewSample = lazy(() => import('./ModalAddNewSample'))

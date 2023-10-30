@@ -1,18 +1,20 @@
 import ItemContent from "../../shared/ItemContent";
 import {IconPlus, IconTopic} from "../../../assets/svg/ConversationScript/IconConersationScript";
-import {IReplyTopicItem} from "../../../dto/reply-topic";
 import {message, Spin} from "antd";
 import ItemTopic from "./ItemTopic";
 import {lazy, Suspense, useState} from "react";
 import {delTopic} from "../../../api/conversationScript";
 import Cookies from "js-cookie";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../../store";
+import {setReplyTopics} from "../../../reducers/conversationScriptSlice";
 
-export default function Topic({topics, loadingTopic, setTopics} : {
-  topics: IReplyTopicItem[] | undefined
+export default function Topic({loadingTopic} : {
   loadingTopic: boolean
-  setTopics: (topics: IReplyTopicItem[]) => void
 }) {
+  const dispatch = useDispatch()
   const [openModalAdd, setOpenModalAdd] = useState(false)
+  const {replyTopics} = useSelector((state: RootState) => state.conversationScript)
   const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
   const generateListTopic = () => {
     if(loadingTopic){
@@ -21,14 +23,14 @@ export default function Topic({topics, loadingTopic, setTopics} : {
         </Spin>
       </div>
     } else {
-      if(topics === undefined){
+      if(replyTopics === undefined){
         return <>Không tồn tại chủ đề</>
-      } else if (topics.length === 0){
+      } else if (replyTopics.length === 0){
         return <div className={`flex justify-center text-sm font-semibold`}>Chưa có chủ đề</div>
       } else {
         return <div className={`flex flex-col max-h-[200px] gap-2 overflow-auto`}>
           {
-            topics.map((item, key) => {
+            replyTopics.map((item, key) => {
               return <ItemTopic handleDelTopic={(id: string) => handleDelTopic(id)} item={item} key={key}/>
             })
           }
@@ -38,13 +40,13 @@ export default function Topic({topics, loadingTopic, setTopics} : {
   }
 
   const handleCreateTopic = (name: string, color: string, _id: string) => {
-    const newListTopic = [...topics || []]
+    const newListTopic = [...replyTopics || []]
     newListTopic.push({
       name,
       color,
       _id
     })
-    setTopics(newListTopic)
+    dispatch(setReplyTopics(newListTopic))
     setOpenModalAdd(false)
   }
 
@@ -52,11 +54,11 @@ export default function Topic({topics, loadingTopic, setTopics} : {
     try {
       const delTop = await delTopic(userInfor?.last_project_active, id)
       if(delTop){
-        const newListTopic = [...topics || []]
+        const newListTopic = [...replyTopics || []]
         const findIndexTopicByIdDel = newListTopic.findIndex((item) => item._id === id)
         if(findIndexTopicByIdDel >= 0){
           newListTopic.splice(findIndexTopicByIdDel, 1)
-          setTopics(newListTopic)
+          dispatch(setReplyTopics(newListTopic))
         }
         message.success('Xoá chủ đề thành công')
       }

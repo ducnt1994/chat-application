@@ -1,7 +1,6 @@
 import {Button, Divider, Image, Input, message, Modal, Select, Upload} from "antd";
 import {useState} from "react";
 import Cookies from "js-cookie";
-import {IReplyTopicItem} from "../../../dto/reply-topic";
 import {RcFile, UploadProps} from "antd/es/upload";
 import {ItemFile} from "../../../dto";
 import {getBase64} from "../../../helper/file";
@@ -9,6 +8,8 @@ import IconDelete from "../../../assets/svg/IconDelete";
 import {uploadImage} from "../../../api/uploadFile";
 import {addReplySample} from "../../../api/conversationScript";
 import {IReplySampleItem} from "../../../dto/reply-sample";
+import {useSelector} from "react-redux";
+import {RootState} from "../../../store";
 
 const {TextArea} = Input
 
@@ -18,12 +19,12 @@ const initialState = {
   content: '',
   images: []
 }
-export default function ModalAddNewSample({open, handleClose, handleConfirm, topics} : {
+export default function ModalAddNewSample({open, handleClose, handleConfirm} : {
   open: boolean
   handleClose: () => void
   handleConfirm: (item: IReplySampleItem) => void
-  topics: IReplyTopicItem[] | undefined
 }) {
+  const { replyTopics} = useSelector((state : RootState) => state.conversationScript)
   const [creatingSample, setCreatingSample] = useState(false)
   const [newSample, setNewSample] = useState<{
     topicId: string,
@@ -139,7 +140,7 @@ export default function ModalAddNewSample({open, handleClose, handleConfirm, top
                 defaultValue=""
                 style={{ width: 200 }}
                 onChange={handleChangeTopic}
-                options={typeof topics !== "undefined" ? topics.map((item) => {
+                options={typeof replyTopics !== "undefined" ? replyTopics.map((item) => {
                   return {
                     value: item._id,
                     label: <div className={`flex gap-2 items-center`}>

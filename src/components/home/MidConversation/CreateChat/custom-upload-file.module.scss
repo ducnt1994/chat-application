@@ -1,8 +1,18 @@
-.custom-upload {
+.CustomUpload {
   :global {
     .ant-upload-list-item-container{
       width: 75px!important;
       height: 75px!important;
+    }
+    .ant-popover-inner {
+      padding: 0 12px 12px 12px!important;
+    }
+    .ant-image {
+      width: 55px!important;
+      height: 55px!important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

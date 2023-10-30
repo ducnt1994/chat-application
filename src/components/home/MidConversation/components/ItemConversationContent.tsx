@@ -5,6 +5,7 @@ import {IHistoryChat, IMediaItem} from "../../../../dto/conversation-list/respon
 import {Image, Tooltip} from "antd";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import {IMAGE_ERROR} from "../../../../utils/constants/conversation";
+import styles from "./custom.module.scss"
 
 
 export default function ItemConversationContent({position = 'left', historyItem, isSameSender} : {
@@ -30,7 +31,7 @@ export default function ItemConversationContent({position = 'left', historyItem,
               typeof historyItem?.media !== "undefined" && <div className={`flex flex-wrap gap-2 rounded-md`}>
                 {
                   typeof  historyItem?.media !== "undefined" && (historyItem?.media as IMediaItem[]).length > 0 && (historyItem?.media as IMediaItem[]).map((image, index) => {
-                    return <Image
+                    return <div className={`${styles.PopoverCustom} border border-gray-200 rounded-lg`} key={index}><Image
                       key={index}
                       className={`max-w-[128px] max-h-[128px] object-contain flex`}
                       alt={'avatar'}
@@ -38,7 +39,7 @@ export default function ItemConversationContent({position = 'left', historyItem,
                         display: 'flex'
                       }}
                       fallback={IMAGE_ERROR}
-                      src={image.url}/>
+                      src={image.url}/></div>
                   })
                 }
 
