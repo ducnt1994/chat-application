@@ -2,10 +2,7 @@ import React, {Suspense} from 'react';
 import './App.css';
 import {Routes, Route} from "react-router-dom";
 import Layout from "./layout";
-import Home from "./pages/Home";
 import LayoutSetting from "./layout/LayoutSetting";
-import ConversationScriptPage from "./pages/ConversationScriptPage";
-import {Spin} from "antd";
 import PageLoading from "./components/shared/PageLoading";
 
 function App() {

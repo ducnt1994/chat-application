@@ -31,3 +31,16 @@ export const addReplySample = async (projectId : string, data: {}): Promise<IRep
   const res = await API.post(uri, data);
   return res.data.data;
 };
+
+export const updateReplySample = async (projectId : string, data: {}, replySampleId : string): Promise<IReplySampleItem> => {
+  const uri = `projects/${projectId}/reply-sample/${replySampleId}`;
+  console.log(replySampleId)
+  const res = await API.put(uri, data);
+  return res.data.data;
+};
+
+export const delReplySample = async (projectId : string, sampleId: string): Promise<boolean> => {
+  const uri = `projects/${projectId}/reply-sample/${sampleId}`;
+  const res = await API.delete(uri);
+  return res.data.data;
+};

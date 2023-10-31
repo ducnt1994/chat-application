@@ -1,13 +1,15 @@
 import ItemContent from "../../shared/ItemContent";
-import {IconPlus, IconReply} from "../../../assets/svg/ConversationScript/IconConersationScript";
+import {IconEdit, IconPlus, IconReply, IconTrash} from "../../../assets/svg/ConversationScript/IconConersationScript";
 import {IReplySampleItem} from "../../../dto/reply-sample";
-import {Image, Spin, Table, Tooltip, Typography} from "antd";
+import {Image, message, Spin, Table, Tooltip, Typography} from "antd";
 import {ColumnsType} from "antd/es/table";
 import {IMAGE_ERROR} from "../../../utils/constants/conversation";
 import {lazy, Suspense, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {setReplySamples} from "../../../reducers/conversationScriptSlice";
 import {RootState} from "../../../store";
+import {delReplySample} from "../../../api/conversationScript";
+import {getUserInfor} from "../../../helper/common";
 
 export default function ReplySample({ loadingSample} : {
   loadingSample: boolean
@@ -15,6 +17,8 @@ export default function ReplySample({ loadingSample} : {
   const {replySamples, replyTopics} = useSelector((state : RootState) => state.conversationScript)
   const dispatch = useDispatch()
   const [openModalAdd, setOpenModalAdd] = useState(false)
+  const [openModalUpdate, setOpenModalUpdate] = useState(false)
+  const [currentRowHover, setCurrentRowHover] = useState('')
   function getTopicInfo(topicId: string) {
     const indexTopic = replyTopics?.findIndex((item) => item._id === topicId)
     if(indexTopic !== undefined && indexTopic >= 0){
@@ -101,15 +105,26 @@ export default function ReplySample({ loadingSample} : {
       key: 'content',
       dataIndex: 'content',
       width: '50%',
-      render: (content : any) => (
+      render: (content : string, record) => (
         <Tooltip placement={'left'} title={content || ""}>
-          <div>{
-            typeof content !== 'undefined'
-              ? content.length > 50
-                ? content.substring(0,45) + '...'
-                : content
-              : ''
-          }</div>
+          <div className={`relative`}>
+            <div>{
+              typeof content !== 'undefined'
+                ? content.length > 40
+                  ? content.substring(0,25) + '...'
+                  : content
+                : ''
+            }</div>
+            {
+              currentRowHover === record._id && <div className={`absolute right-0 top-0 flex gap-2`}>
+                <div className={`cursor-pointer`} onClick={() => {
+                  setOpenModalUpdate(true)
+                }}><IconEdit/></div>
+                <div className={`cursor-pointer`} onClick={handleDeleteReplySample}><IconTrash/></div>
+              </div>
+            }
+          </div>
+
         </Tooltip>
       ),
     },
@@ -128,10 +143,41 @@ export default function ReplySample({ loadingSample} : {
       } else {
         return <div className={`flex flex-col max-h-[800px] gap-2 overflow-auto`}>
           {
-            replySamples && replySamples.length > 0 && <Table rowKey={({ _id }) => _id} columns={columns} dataSource={replySamples} />
+            replySamples && replySamples.length > 0 && <Table
+              rowKey={({ _id }) => _id}
+              columns={columns}
+              dataSource={replySamples}
+              onRow={(record, rowIndex) => {
+                return {
+                  onMouseEnter: (event) => {
+                    setCurrentRowHover(record._id)
+                  }, // mouse enter row
+                  onMouseLeave: (event) => {
+                    setCurrentRowHover('')
+                  }, // mouse leave row
+                };
+              }}
+            />
           }
         </div>
       }
+    }
+  }
+  
+  const handleDeleteReplySample = async () => {
+    try {
+      const delSample = await delReplySample(getUserInfor()?.last_project_active, currentRowHover)
+      if(delSample){
+        const newListSample = [...replySamples || []]
+        const findIndexSampleByIdDel = newListSample.findIndex((item) => item._id === currentRowHover)
+        if(findIndexSampleByIdDel >= 0){
+          newListSample.splice(findIndexSampleByIdDel, 1)
+          dispatch(setReplySamples(newListSample))
+        }
+        message.success('Xoá câu trả lời mẫu thành công')
+      }
+    } catch (e) {
+      message.error('Xoá câu trả lời mẫu thất bại')
     }
   }
 
@@ -140,6 +186,17 @@ export default function ReplySample({ loadingSample} : {
     newListSample.push(item)
     dispatch(setReplySamples(newListSample))
     setOpenModalAdd(false)
+  }
+
+  const handleUpdareReplySample = (item: IReplySampleItem) => {
+    const newListSample = [...replySamples || []]
+    const replaceItem = newListSample.findIndex((itemReplace) => itemReplace._id === item._id)
+    if(replaceItem){
+      newListSample.splice(replaceItem, 1, item)
+      dispatch(setReplySamples(newListSample))
+    }
+    dispatch(setReplySamples(newListSample))
+    setOpenModalUpdate(false)
   }
   
   return (
@@ -158,8 +215,17 @@ export default function ReplySample({ loadingSample} : {
           handleClose={() => setOpenModalAdd(false)}
           handleConfirm={(item: IReplySampleItem) => handleCreateReplySample(item)}/>
       </Suspense>
+      <Suspense>
+        <ModalUpdateSample
+          open={openModalUpdate}
+          handleClose={() => setOpenModalUpdate(false)}
+          handleConfirm={(item: IReplySampleItem) => handleUpdareReplySample(item)}
+          currentSampleId={currentRowHover}
+        />
+      </Suspense>
     </div>
   )
 }
 
 const ModalAddNewSample = lazy(() => import('./ModalAddNewSample'))
+const ModalUpdateSample = lazy(() => import('./ModalUpdateSample'))
