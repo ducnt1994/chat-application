@@ -6,6 +6,7 @@ import {Image, Tooltip} from "antd";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import {IMAGE_ERROR} from "../../../../utils/constants/conversation";
 import styles from "./custom.module.scss"
+import {MEDIA_TYPE_FILE_IMAGE, MEDIA_TYPE_FILE_VIDEO} from "../../../../utils/constants/medias";
 
 
 export default function ItemConversationContent({position = 'left', historyItem, isSameSender} : {
@@ -26,20 +27,47 @@ export default function ItemConversationContent({position = 'left', historyItem,
       <div className={`flex-1 ${position === 'left' ? '' : 'flex justify-end'}`}>
         <div>
           <div className={`max-w-[430px] py-1 px-2 bg-white rounded-md relative text-left w-fit`} style={{background: position === 'left' ? '' : '#FFF6DE'}}>
-            <div className={`text-[13px] whitespace-pre-line break-words`} dangerouslySetInnerHTML={{__html: historyItem.content}}></div>
+            <div className={`text-[13px] whitespace-pre-line ${historyItem.content ? 'mb-2' : ''} break-words`} dangerouslySetInnerHTML={{__html: historyItem.content}}></div>
             {
               typeof historyItem?.media !== "undefined" && <div className={`flex flex-wrap gap-2 rounded-md`}>
                 {
                   typeof  historyItem?.media !== "undefined" && (historyItem?.media as IMediaItem[]).length > 0 && (historyItem?.media as IMediaItem[]).map((image, index) => {
-                    return <div className={`${styles.PopoverCustom} border border-gray-200 rounded-lg`} key={index}><Image
-                      key={index}
-                      className={`max-w-[128px] max-h-[128px] object-contain flex`}
-                      alt={'avatar'}
-                      style={{
-                        display: 'flex'
-                      }}
-                      fallback={IMAGE_ERROR}
-                      src={image.url}/></div>
+                    return <div className={`${styles.PopoverCustom} border border-gray-200 rounded-lg`} key={index}>
+                      {
+                        image.type === MEDIA_TYPE_FILE_IMAGE && <Image
+                          key={index}
+                          className={`max-w-[128px] max-h-[128px] object-contain flex`}
+                          alt={'avatar'}
+                          style={{
+                            display: 'flex'
+                          }}
+                          fallback={IMAGE_ERROR}
+                          src={image.url}/>
+                      }
+                      {
+                        image.type === MEDIA_TYPE_FILE_VIDEO && <div className={`max-w-[150px]`}>
+                          <video width="400" controls>
+                            <source src={image.url} type={'video/mp4'}/>
+                            Your browser does not support HTML5 video.
+                          </video>
+                        </div>
+                      }
+                    </div>
+                  })
+                }
+
+              </div>
+            }
+
+            {
+              typeof historyItem.extra_info_chat_content !== 'undefined' && historyItem.extra_info_chat_content.length > 0 && <div className={`flex flex-col gap-2 my-2`}>
+                {
+                  historyItem.extra_info_chat_content.map((itemEx, keyEx) => {
+                    return <div key={keyEx} className={`border-2 shadow-gray-200 border-gray-100 rounded-lg p-2 bg-white`}>
+                      <a className={`text-blue-500 text-sm`} rel={'noreferrer'} target={'_blank'} href={itemEx.url}>
+                        {itemEx.title}
+                      </a>
+                    </div>
                   })
                 }
 

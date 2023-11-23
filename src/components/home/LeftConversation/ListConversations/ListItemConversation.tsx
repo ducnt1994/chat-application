@@ -32,7 +32,7 @@ export default function ListItemConversation({conversationItem} : {
   const {activeConversationId, conversationListLoaded} = useSelector((state : RootState) => state.conversation)
   const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
   function generateLastChat() {
-    if(conversationItem.last_chat.image){
+    if(conversationItem.last_chat.image && conversationItem.last_chat.image.length > 0){
       return '[Gửi hình ảnh]'
     } else {
       if(!conversationItem.last_chat.content){
@@ -83,8 +83,6 @@ export default function ListItemConversation({conversationItem} : {
     }
   }
 
-
-
   return (
     <div className={`flex py-3 gap-4 pl-3 pr-1 items-center ${conversationItem._id === activeConversationId 
       ? 'bg-conversation-active' 
@@ -125,7 +123,7 @@ export default function ListItemConversation({conversationItem} : {
 
         <div className={`mt-4 flex gap-1 justify-end`}>
           {
-            conversationItem.customer_info.phones.length > 0 && <div><IconPhone/></div>
+            typeof conversationItem.customer_info.phones !== 'undefined' && conversationItem.customer_info.phones.length > 0 && <div><IconPhone/></div>
           }
           {
             conversationItem.type === CONVERSATION_TYPE_CHAT_FB

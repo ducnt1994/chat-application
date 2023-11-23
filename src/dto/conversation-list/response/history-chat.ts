@@ -5,6 +5,8 @@ export interface IMediaItem {
   project_id: string
   source?: number
   url: string
+  type?: number
+  thumb?: string
 }
 
 export interface IHistoryChat {
@@ -40,5 +42,9 @@ export interface IHistoryChat {
   is_delete?: number
   _id: string
   is_sending_message?: boolean // chỉ xuất hiện khi bấm gửi message ở so9
-  fake_id?: string // chỉ xuất hiện khi bấm gửi message ở so9
+  fake_id?: string // chỉ xuất hiện khi bấm gửi message ở so9,
+  extra_info_chat_content?: {
+    url: string,
+    title: string
+  }[]
 }

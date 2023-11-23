@@ -14,6 +14,7 @@ import {RootState} from "../../../../store";
 import {setCommentToReply} from "../../../../reducers/conversationSlice";
 import {useMemo} from "react";
 import styles from "./custom.module.scss"
+import {MEDIA_TYPE_FILE_IMAGE} from "../../../../utils/constants/medias";
 
 
 export default function ItemConversationContentComment({historyItem} : {
@@ -110,13 +111,13 @@ export const ItemRender = ({historyItem, borderColorItem} : {
             className={`max-w-[430px] border-l-4 py-1 px-2 bg-white rounded-md relative text-left w-fit`} >
             <div className={`text-[13px] whitespace-pre-line break-words`} dangerouslySetInnerHTML={{__html: historyItem.content}}></div>
             {
-              typeof historyItem?.media !== "undefined" && <div className={`grid grid-cols-${generateColGridMedia()} gap-2 rounded-md mt-2`}>
+              typeof historyItem?.media !== "undefined" && historyItem?.media && <div className={`grid grid-cols-${generateColGridMedia()} gap-2 rounded-md mt-2`}>
                 {
                   typeof  historyItem?.media !== "undefined" && <div className={`${styles.PopoverCustom}`}><Image
                     className={`max-w-[128px] max-h-[128px]`}
                     alt={'avatar'}
                     fallback={IMAGE_ERROR}
-                    src={(historyItem?.media as IMediaItem).url}/></div>
+                    src={(historyItem?.media as IMediaItem)?.type === MEDIA_TYPE_FILE_IMAGE ? (historyItem?.media as IMediaItem).url : (historyItem?.media as IMediaItem).thumb}/></div>
                 }
 
               </div>

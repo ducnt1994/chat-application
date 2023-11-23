@@ -23,11 +23,7 @@ export default function Home() {
       });
       dispatch(setConversationList(conversations))
     } catch (e) {
-      // alertToast({
-      //   title: 'Lỗi!!',
-      //   message: "Đã có lỗi xảy ra khi tải các đoạn hội thoại. Vui lòng thử lại sau.",
-      //   type: 'error'
-      // })
+      console.error(e)
       message.error('Đã có lỗi xảy ra khi tải các đoạn hội thoại. Vui lòng thử lại sau.');
     }
     

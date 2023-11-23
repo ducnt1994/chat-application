@@ -18,7 +18,7 @@ export default function TabInformation({conversationItem} : {
         </div>
         <div className={`mt-2 flex gap-3`}>
           {
-            typeof conversationItem?.customerInfor?.phones.length !== 'undefined' &&
+            typeof conversationItem?.customerInfor?.phones !== 'undefined' &&
             conversationItem?.customerInfor?.phones.length > 0 && <div className={`cursor-pointer flex items-center gap-1`}>
               <div className={`flex items-center mt-[1px]`}>
                 <IconPhone/>

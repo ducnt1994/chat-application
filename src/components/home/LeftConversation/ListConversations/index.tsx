@@ -58,7 +58,7 @@ export default function ListConversations() {
           </div>
         }
         {
-          !isLoadingConversations && conversations.length === 0 && <>Không có cuộc hội thoại nào</>
+          !isLoadingConversations && conversations.length === 0 && <div className={`mt-2 font-bold`}>Không có cuộc hội thoại nào</div>
         }
 
 
