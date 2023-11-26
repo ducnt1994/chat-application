@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {IConversationItem, IConversationItemLoaded, IFilter, INoteItem} from "../dto";
 import {IHistoryChat} from "../dto/conversation-list/response/history-chat";
 import {CONVERSATION_IS_READ} from "../utils/constants/conversation";
+import {ISocketMessage} from "../dto/socket";
 
 interface IInitialState {
   conversations: IConversationItem[] | [];
@@ -205,7 +206,48 @@ export const conversationSlice = createSlice({
           itemChatToAddNote.info.note.splice(fakeNoteIndex, 1)
         }
       }
-    }
+    },
+    setChatSocket(state: any, action : PayloadAction<ISocketMessage>){
+      const conversation = action.payload.conversation
+      const relateConversationItem = action.payload.relate_conversation_item // có thể là item chat hoặc comment
+      // tìm conversation để thay thế
+      const conversationIndexBySocket = state.conversations.findIndex((item : IConversationItem) => item._id === conversation._id);
+      if(conversationIndexBySocket >= 0){
+        state.conversations.splice(conversationIndexBySocket, 1, conversation) // thay bằng conversation mới
+      } else {
+        state.conversations.unshift(conversation)
+      }
+
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === conversation._id);
+      if(conversationLoadedIndex !== false){
+        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
+        newData.chatHistory.push(relateConversationItem)
+        state.conversationListLoaded[conversationLoadedIndex] = newData;
+      }
+    },
+    setCommentSocket(state: any, action : PayloadAction<ISocketMessage>){
+      const conversation = action.payload.conversation
+      const relateConversationItem = action.payload.relate_conversation_item // có thể là item chat hoặc comment
+      // tìm conversation để thay thế
+      const conversationIndexBySocket = state.conversations.findIndex((item : IConversationItem) => item._id === conversation._id);
+      if(conversationIndexBySocket >= 0){
+        state.conversations.splice(conversationIndexBySocket, 1, conversation) // thay bằng conversation mới
+      } else {
+        state.conversations.unshift(conversation)
+      }
+
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === conversation._id);
+      if(conversationLoadedIndex !== false){
+        const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
+        const childIndex = newData.chatHistory.findIndex((child: IHistoryChat) => child._id === relateConversationItem._id)
+        if(childIndex >= 0){
+          newData.chatHistory.splice(childIndex, 1 , relateConversationItem)
+        } else {
+          newData.chatHistory.push(relateConversationItem)
+        }
+        state.conversationListLoaded[conversationLoadedIndex] = newData;
+      }
+    },
   },
   // extraReducers: (builder) => {
   //   builder.addCase(fetchOneConversation.fulfilled, (state, action) => {
@@ -231,6 +273,8 @@ export const {
   setCurrentConversationToTop,
   markStatusReadConversation,
   addNoteData,
-  removeNoteData
+  removeNoteData,
+  setChatSocket,
+  setCommentSocket
 } = conversationSlice.actions;
 export default conversationSlice.reducer;

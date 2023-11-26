@@ -4,11 +4,15 @@ import {Routes, Route} from "react-router-dom";
 import Layout from "./layout";
 import LayoutSetting from "./layout/LayoutSetting";
 import PageLoading from "./components/shared/PageLoading";
+import useSocketListener from "./hooks/useSocketListener";
+import {useDispatch} from "react-redux";
 
 function App() {
   const Home = React.lazy(() => import('./pages/Home'));
   const ConversationScriptPage = React.lazy(() => import('./pages/ConversationScriptPage'));
-
+  const dispatch = useDispatch()
+  useSocketListener(dispatch)
+  
   return (
     <div className={'App'}>
       <Routes>
