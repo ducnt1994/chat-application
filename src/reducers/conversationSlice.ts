@@ -219,7 +219,7 @@ export const conversationSlice = createSlice({
       }
 
       const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === conversation._id);
-      if(conversationLoadedIndex !== false){
+      if(conversationLoadedIndex >= 0){
         const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
         newData.chatHistory.push(relateConversationItem)
         state.conversationListLoaded[conversationLoadedIndex] = newData;
