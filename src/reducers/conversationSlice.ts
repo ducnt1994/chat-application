@@ -221,7 +221,12 @@ export const conversationSlice = createSlice({
       const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === conversation._id);
       if(conversationLoadedIndex >= 0){
         const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
-        newData.chatHistory.push(relateConversationItem)
+        const childIndex = newData.chatHistory.findIndex((child: IHistoryChat) => child._id === relateConversationItem._id)
+        if(childIndex >= 0){
+          newData.chatHistory.splice(childIndex, 1 , relateConversationItem)
+        } else {
+          newData.chatHistory.push(relateConversationItem)
+        }
         state.conversationListLoaded[conversationLoadedIndex] = newData;
       }
     },
