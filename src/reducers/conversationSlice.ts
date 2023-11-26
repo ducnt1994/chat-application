@@ -242,7 +242,7 @@ export const conversationSlice = createSlice({
       }
 
       const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === conversation._id);
-      if(conversationLoadedIndex !== false){
+      if(conversationLoadedIndex >= 0){
         const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
         const childIndex = newData.chatHistory.findIndex((child: IHistoryChat) => child._id === relateConversationItem._id)
         if(childIndex >= 0){
