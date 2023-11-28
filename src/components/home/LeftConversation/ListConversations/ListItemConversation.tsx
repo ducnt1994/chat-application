@@ -83,6 +83,10 @@ export default function ListItemConversation({conversationItem} : {
     }
   }
 
+  if(conversationItem && !conversationItem.channel_infor){
+    console.log(conversationItem)
+  }
+
   return (
     <div className={`flex py-3 gap-4 pl-3 pr-1 items-center ${conversationItem._id === activeConversationId 
       ? 'bg-conversation-active' 
@@ -109,11 +113,13 @@ export default function ListItemConversation({conversationItem} : {
       <div>
         <div className={`flex gap-2`}>
           <div>
-            <Tooltip placement="bottom" title={conversationItem.channel_infor.name}>
-              <div>
-                <Avt size={18} src={conversationItem.channel_infor.picture}/>
-              </div>
-            </Tooltip>
+            {
+              conversationItem.channel_infor && <Tooltip placement="bottom" title={conversationItem.channel_infor.name}>
+                <div>
+                  <Avt size={18} src={conversationItem.channel_infor.picture}/>
+                </div>
+              </Tooltip>
+            }
           </div>
           <div>
             <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('DD/MM')}</div>
