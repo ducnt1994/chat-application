@@ -15,22 +15,28 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
 import {
   markStatusReadConversation,
-  setActiveConversationId,
+  setActiveConversationId, setCustomerInformation,
   setHistoryChat,
   setLoadingHistoryConversation
 } from "../../../../reducers/conversationSlice";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import moment from "moment";
-import Cookies from "js-cookie";
-import {confirmRead, getConversationChats, getConversationComments} from "../../../../api/conversation";
+import {
+  confirmRead,
+  getConversationChats,
+  getConversationComments,
+  getCustomerById
+} from "../../../../api/conversation";
 import {Tooltip, Avatar as Avt, message} from "antd";
+import {getUserInfor} from "../../../../helper/common";
+import {ICustomerInformation} from "../../../../dto/customer/info/customer-information";
 
 export default function ListItemConversation({conversationItem} : {
   conversationItem: IConversationItem
 }) {
   const dispatch = useDispatch();
   const {activeConversationId, conversationListLoaded} = useSelector((state : RootState) => state.conversation)
-  const userInfor = JSON.parse(Cookies.get('userInfor') || "{}")
+  const userInfor = getUserInfor()
   function generateLastChat() {
     if(conversationItem.last_chat.image && conversationItem.last_chat.image.length > 0){
       return '[Gửi hình ảnh]'
@@ -55,12 +61,13 @@ export default function ListItemConversation({conversationItem} : {
       }
     }
   }
+  
+  const handleFetchCustomerInfor = async () => {
+    const customerInfor : ICustomerInformation = await getCustomerById(userInfor.last_project_active, conversationItem.customer_info.id)
+    dispatch(setCustomerInformation({id: conversationItem._id, customer_info: customerInfor}));
+  }
 
-  const handleClickItem = async () => {
-    dispatch(setActiveConversationId({id: conversationItem._id}))
-    //mark-read if not read
-    handleMarkingReadConversation()
-
+  const handleFetchChatHistory = async () => {
     const checkExistConversationLoaded = conversationListLoaded.find(item => conversationItem._id === item.conversationId)
     if(!checkExistConversationLoaded || !checkExistConversationLoaded.chatHistory){
       dispatch(setLoadingHistoryConversation({conversationId: conversationItem._id}))
@@ -83,8 +90,15 @@ export default function ListItemConversation({conversationItem} : {
     }
   }
 
-  if(conversationItem && !conversationItem.channel_infor){
-    console.log(conversationItem)
+  const handleClickItem = async () => {
+    dispatch(setActiveConversationId({id: conversationItem._id}))
+
+    await Promise.all([
+      //mark-read if not read
+      handleMarkingReadConversation(),
+      handleFetchChatHistory(),
+      handleFetchCustomerInfor()
+    ])
   }
 
   return (
@@ -110,6 +124,7 @@ export default function ListItemConversation({conversationItem} : {
           </div>
         </div>
       </div>
+
       <div>
         <div className={`flex gap-2`}>
           <div>
@@ -122,8 +137,8 @@ export default function ListItemConversation({conversationItem} : {
             }
           </div>
           <div>
-            <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('DD/MM')}</div>
-            <div className={`text-[11px] text-gray-500`}>{moment(conversationItem.last_chat.created_at).format('HH:mm')}</div>
+            <div className={`text-[11px] text-gray-500`}>{moment.unix(moment(conversationItem?.last_chat.created_at).unix()).format('DD/MM')}</div>
+            <div className={`text-[11px] text-gray-500`}>{moment.unix(moment(conversationItem?.last_chat.created_at).unix()).format('HH:mm')}</div>
           </div>
         </div>
 

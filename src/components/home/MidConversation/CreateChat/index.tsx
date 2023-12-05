@@ -30,6 +30,13 @@ import FileUploadPreview from "./FileUploadPreview";
 import {uploadImage} from "../../../../api/uploadFile";
 import {ReplySamples} from "./ReplySamples";
 import {IReplySampleItem} from "../../../../dto/reply-sample";
+import {checkIsInstalledExt, getUserInfor} from "../../../../helper/common";
+
+export interface ISendDataInterface {
+  project_id: string
+  content?: string
+  images?: string[]
+}
 
 const { TextArea } = Input;
 export default function CreateChat({conversationItem} : {
@@ -162,11 +169,20 @@ export default function CreateChat({conversationItem} : {
   }
 
   const handleSendChat = async () => {
-    const data : {
-      project_id: string
-      content?: string
-      images?: string[]
-    } = {
+    const lastCreatedAtChat = typeof conversationItem?.info?.last_time_customer !== 'undefined'
+      ? Math.floor(conversationItem?.info?.last_time_customer / 1000)
+      : moment().subtract(7, 'days').unix()
+    // @ts-ignore
+    const messageSent24Hours = (moment().unix() - lastCreatedAtChat) >= (24 * 60 * 60)
+    const cannotSendMessageWithoutGlobalId = !conversationItem?.customerInfor?.global_id && messageSent24Hours
+
+    if(cannotSendMessageWithoutGlobalId){
+      // tin nhắn đã gửi quá 24h và chưa crawl được global id
+      message.error('Vui lòng cài đặt extension để sử dụng được chức năng gửi tin nhắn cho khách hàng chưa trả lời quá 24h')
+      return
+    }
+
+    const data : ISendDataInterface = {
       project_id: userInfor.last_project_active,
       ...(value !== "" && { content: value }),
       // ...(mediaItems && mediaItems.length > 0 && { images: mediaItems.map((item) => item.name) }),
@@ -199,17 +215,75 @@ export default function CreateChat({conversationItem} : {
     setValue('')
     setFileListSelected([])
     try {
-      const sendMessage = await sendChat(conversationItem?.info._id || "", data)
-      dispatch(setHistoryItemByFakeId({
-        fakeId: fakeData.fake_id,
-        historyItem: sendMessage
-      }))
+
+      // @ts-ignore
+      if((moment().unix() - lastCreatedAtChat) >= (24 * 60 * 60)){ // gửi tin nhắn cho khách quá 24h
+        await handleSendChat24h(data)
+      } else {
+        const sendMessage = await sendChat(conversationItem?.info._id || "", data)
+        dispatch(setHistoryItemByFakeId({
+          fakeId: fakeData.fake_id,
+          historyItem: sendMessage
+        }))
+      }
       setIsSendMessageSuccess(true)
       handleResetData()
     } catch (e) {
       setIsSendMessageFail(true)
       handleResetData()
     }
+  }
+
+  const handleSendChat24h = async (data: ISendDataInterface) => {
+    console.log(checkIsInstalledExt())
+    if(checkIsInstalledExt()){
+      console.log(conversationItem?.customerInfor?.global_id)
+      if(typeof conversationItem?.customerInfor?.global_id === 'undefined'){
+        console.log("++++++++++++")
+        const callAPIEvent = new CustomEvent('callAPI',
+          {detail:
+              {
+                method:"FETCH_USER",
+                data: {
+                  project_id: getUserInfor().last_project_active,
+                  page_id: conversationItem?.info.channel_infor?.platform_id,
+                  filter: {
+                    page_id: conversationItem?.info.channel_infor?.platform_id,
+                    id: conversationItem?.customerInfor?.global_id,
+                    name: conversationItem?.customerInfor?.name,
+                    timestamp: conversationItem?.info?.last_chat?.timestamp
+                  },
+                  user_so9_id: conversationItem?.customerInfor?._id,
+                  conversation_id: conversationItem?.info?._id
+                }
+              }
+          });
+        const dispatchLog = document.dispatchEvent(callAPIEvent);
+        console.log({dispatchLog})
+      } else {
+        console.log("run nn========")
+        const callAPIEvent = new CustomEvent('callAPI',
+          {
+            detail: {
+              method:"24_PLUS_1",
+              data: {
+                message: data.content,
+                page_id: conversationItem?.info?.channel_infor?._id,
+                global_id : conversationItem?.customerInfor?.global_id,
+                image_url: data.images
+              }
+            }
+          });
+        const dispatchLog = document.dispatchEvent(callAPIEvent);
+        console.log({dispatchLog})
+      }
+
+      return
+    } else {
+      message.error('Vui lòng cài đặt extension để sử dụng được chức năng gửi tin nhắn cho khách hàng chưa trả lời quá 24h')
+      return
+    }
+
   }
 
   const handleResetData = () => {

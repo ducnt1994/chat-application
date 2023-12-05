@@ -10,10 +10,11 @@ export interface IConversationItem {
   is_read: number
   last_chat: {
     content: string
-    created_at: string
+    created_at: string | object
     from_customer: number
     id: string
     image: string
+    timestamp?: number
   }
   last_user_care: {
     avatar: string
@@ -29,6 +30,7 @@ export interface IConversationItem {
   updated_at: string
   meta_data: IMetaData
   _id: string
+  last_time_customer?: number
 }
 
 export interface IMetaData {

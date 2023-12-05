@@ -13,6 +13,17 @@ export const getConversations = async (data : IFilterConversation) => {
   return res.data.data;
 };
 
+/**
+ * @param {string} projectId
+ * @param {string} id
+ * @returns
+ */
+export const getCustomerById = async (projectId: string, id: string) => {
+  const uri = `/projects/${projectId}/customers/${id}`;
+  const res = await API.get(uri);
+  return res.data.data;
+};
+
 // /**
 //  * @param {string} conversationId
 //  * @param {{params: {project_id: string}}} data

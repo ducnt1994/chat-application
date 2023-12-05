@@ -3,6 +3,7 @@ import {IConversationItem, IConversationItemLoaded, IFilter, INoteItem} from "..
 import {IHistoryChat} from "../dto/conversation-list/response/history-chat";
 import {CONVERSATION_IS_READ} from "../utils/constants/conversation";
 import {ISocketMessage} from "../dto/socket";
+import {ICustomerInformation} from "../dto/customer/info/customer-information";
 
 interface IInitialState {
   conversations: IConversationItem[] | [];
@@ -67,9 +68,17 @@ export const conversationSlice = createSlice({
           conversationId: action.payload.id,
           info: conversationItemClicked,
           chatHistory: [],
-          customerInfor:  conversationItemClicked.customer_info,
+          customerInfor: {},
           isLoadingItem: true
         })
+      }
+    },
+    setCustomerInformation(state: any, action: PayloadAction<{id: string, customer_info: ICustomerInformation}>){
+      const existConversationItem = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.id)
+      if(existConversationItem >= 0){
+        let customerInfor = action.payload.customer_info;
+        customerInfor.id = customerInfor._id || ""
+        state.conversationListLoaded[existConversationItem].customerInfor = customerInfor
       }
     },
     setHistoryChat(state: any, action: PayloadAction<IPayloadHistoryChat>){
@@ -280,6 +289,7 @@ export const {
   addNoteData,
   removeNoteData,
   setChatSocket,
-  setCommentSocket
+  setCommentSocket,
+  setCustomerInformation
 } = conversationSlice.actions;
 export default conversationSlice.reducer;
