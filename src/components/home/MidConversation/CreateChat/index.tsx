@@ -268,7 +268,7 @@ export default function CreateChat({conversationItem} : {
               method:"24_PLUS_1",
               data: {
                 message: data.content,
-                page_id: conversationItem?.info?.channel_infor?._id,
+                page_id: conversationItem?.info?.channel_infor?.platform_id,
                 global_id : conversationItem?.customerInfor?.global_id,
                 image_url: data.images
               }
