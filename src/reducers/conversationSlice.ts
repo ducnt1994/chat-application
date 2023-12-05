@@ -4,6 +4,7 @@ import {IHistoryChat} from "../dto/conversation-list/response/history-chat";
 import {CONVERSATION_IS_READ} from "../utils/constants/conversation";
 import {ISocketMessage} from "../dto/socket";
 import {ICustomerInformation} from "../dto/customer/info/customer-information";
+import {CONVERSATION_NOT_FROM_CUSTOMER} from "../utils/constants/customer";
 
 interface IInitialState {
   conversations: IConversationItem[] | [];
@@ -236,8 +237,16 @@ export const conversationSlice = createSlice({
         } else {
           newData.chatHistory.push(relateConversationItem)
         }
+        if(relateConversationItem.from_customer === CONVERSATION_NOT_FROM_CUSTOMER){
+          // tìm ra message fake để remove
+          const indexFakeId = newData.chatHistory.findIndex((child: IHistoryChat) => typeof child.fake_id !== 'undefined')
+          if(indexFakeId > 0){
+            newData.chatHistory.splice(indexFakeId,1)
+          }
+        }
         state.conversationListLoaded[conversationLoadedIndex] = newData;
       }
+
     },
     setCommentSocket(state: any, action : PayloadAction<ISocketMessage>){
       const conversation = action.payload.conversation
