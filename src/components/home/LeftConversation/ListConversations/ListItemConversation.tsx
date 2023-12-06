@@ -100,7 +100,6 @@ export default function ListItemConversation({conversationItem} : {
       handleFetchCustomerInfor()
     ])
   }
-
   return (
     <div className={`flex py-3 gap-4 pl-3 pr-1 items-center ${conversationItem._id === activeConversationId 
       ? 'bg-conversation-active' 
@@ -137,8 +136,8 @@ export default function ListItemConversation({conversationItem} : {
             }
           </div>
           <div>
-            <div className={`text-[11px] text-gray-500`}>{moment.unix(moment(conversationItem?.last_chat.created_at).unix()).format('DD/MM')}</div>
-            <div className={`text-[11px] text-gray-500`}>{moment.unix(moment(conversationItem?.last_chat.created_at).unix()).format('HH:mm')}</div>
+            <div className={`text-[11px] text-gray-500`}>{moment.unix(conversationItem?.last_chat_created_at_formated).format('DD/MM')}</div>
+            <div className={`text-[11px] text-gray-500`}>{moment.unix(conversationItem?.last_chat_created_at_formated).format('HH:mm')}</div>
           </div>
         </div>
 

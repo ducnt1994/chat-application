@@ -31,6 +31,7 @@ export interface IConversationItem {
   meta_data: IMetaData
   _id: string
   last_time_customer?: number
+  last_chat_created_at_formated: number
 }
 
 export interface IMetaData {
