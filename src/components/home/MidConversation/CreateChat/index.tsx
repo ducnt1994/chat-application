@@ -177,8 +177,33 @@ export default function CreateChat({conversationItem} : {
     const cannotSendMessageWithoutGlobalId = !conversationItem?.customerInfor?.global_id && messageSent24Hours
 
     if(cannotSendMessageWithoutGlobalId){
-      // tin nhắn đã gửi quá 24h và chưa crawl được global id
-      message.error('Vui lòng cài đặt extension để sử dụng được chức năng gửi tin nhắn cho khách hàng chưa trả lời quá 24h')
+      if(checkIsInstalledExt()){
+        const callAPIEvent = new CustomEvent('callAPI',
+          {detail:
+              {
+                method:"FETCH_USER",
+                data: {
+                  project_id: getUserInfor().last_project_active,
+                  page_id: conversationItem?.info.channel_infor?.platform_id,
+                  filter: {
+                    page_id: conversationItem?.info.channel_infor?.platform_id,
+                    id: conversationItem?.customerInfor?.global_id || "",
+                    name: conversationItem?.customerInfor?.name,
+                    timestamp: conversationItem?.info?.last_chat?.timestamp
+                  },
+                  user_so9_id: conversationItem?.customerInfor?._id,
+                  conversation_id: conversationItem?.info?._id
+                }
+              }
+          });
+        const dispatchLog = document.dispatchEvent(callAPIEvent);
+        console.log({dispatch_1: dispatchLog})
+        message.warning('Extension đang cập nhật thông tin của người nhắn. Vui lòng thử lại sau ít phút')
+      }
+      else {
+        // tin nhắn đã gửi quá 24h và chưa crawl được global id
+        message.error('Vui lòng cài đặt extension để sử dụng được chức năng gửi tin nhắn cho khách hàng chưa trả lời quá 24h')
+      }
       return
     }
 
@@ -235,11 +260,8 @@ export default function CreateChat({conversationItem} : {
   }
 
   const handleSendChat24h = async (data: ISendDataInterface) => {
-    console.log(checkIsInstalledExt())
     if(checkIsInstalledExt()){
-      console.log(conversationItem?.customerInfor?.global_id)
       if(typeof conversationItem?.customerInfor?.global_id === 'undefined'){
-        console.log("++++++++++++")
         const callAPIEvent = new CustomEvent('callAPI',
           {detail:
               {
@@ -249,7 +271,7 @@ export default function CreateChat({conversationItem} : {
                   page_id: conversationItem?.info.channel_infor?.platform_id,
                   filter: {
                     page_id: conversationItem?.info.channel_infor?.platform_id,
-                    id: conversationItem?.customerInfor?.global_id,
+                    id: conversationItem?.customerInfor?.global_id || "",
                     name: conversationItem?.customerInfor?.name,
                     timestamp: conversationItem?.info?.last_chat?.timestamp
                   },
@@ -259,9 +281,9 @@ export default function CreateChat({conversationItem} : {
               }
           });
         const dispatchLog = document.dispatchEvent(callAPIEvent);
-        console.log({dispatchLog})
+        console.log({dispatch_2: dispatchLog})
       } else {
-        console.log("run nn========")
+
         const callAPIEvent = new CustomEvent('callAPI',
           {
             detail: {
@@ -275,7 +297,7 @@ export default function CreateChat({conversationItem} : {
             }
           });
         const dispatchLog = document.dispatchEvent(callAPIEvent);
-        console.log({dispatchLog})
+        console.log({dispatch_3: dispatchLog})
       }
 
       return
