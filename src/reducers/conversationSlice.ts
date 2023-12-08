@@ -237,13 +237,13 @@ export const conversationSlice = createSlice({
         } else {
           newData.chatHistory.push(relateConversationItem)
         }
-        if(relateConversationItem.from_customer === CONVERSATION_NOT_FROM_CUSTOMER){
-          // tìm ra message fake để remove
-          const indexFakeId = newData.chatHistory.findIndex((child: IHistoryChat) => typeof child.fake_id !== 'undefined')
-          if(indexFakeId > 0){
-            newData.chatHistory.splice(indexFakeId,1)
-          }
-        }
+        // if(relateConversationItem.from_customer === CONVERSATION_NOT_FROM_CUSTOMER){
+        //   // tìm ra message fake để remove( chỉ xảy ra trong trường hợp gửi tin nhắn quá 24h cho khách)
+        //   const indexFakeId = newData.chatHistory.findIndex((child: IHistoryChat) => typeof child.fake_id !== 'undefined')
+        //   if(indexFakeId > 0){
+        //     newData.chatHistory.splice(indexFakeId,1)
+        //   }
+        // }
         state.conversationListLoaded[conversationLoadedIndex] = newData;
       }
 

@@ -237,8 +237,7 @@ export default function CreateChat({conversationItem} : {
         data.images = imageSend
       }
     }
-    setValue('')
-    setFileListSelected([])
+    handleResetData()
     try {
 
       // @ts-ignore

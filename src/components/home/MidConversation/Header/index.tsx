@@ -1,6 +1,6 @@
 // import IconLocation from "../../../../assets/svg/MidConversation/IconLocation";
 import IconEye from "../../../../assets/svg/MidConversation/IconEye";
-// import IconUser from "../../../../assets/svg/IconUser";
+import IconUser from "../../../../assets/svg/IconUser";
 // import IconUpload from "../../../../assets/svg/IconUpload";
 import IconMail from "../../../../assets/svg/IconMail";
 // import IconRedirect from "../../../../assets/svg/IconRedirect";
@@ -37,6 +37,12 @@ export default function Header({conversationItem} : {
     }
   }
 
+  const handleOpenFacebookProfile = () => {
+    if(conversationItem?.customerInfor?.global_id){
+      window.open(`https://facebook.com/${conversationItem?.customerInfor?.global_id}`)
+    }
+  }
+
   return (
     <>
       {
@@ -57,7 +63,7 @@ export default function Header({conversationItem} : {
                   conversationItem?.info?.last_user_care && <div className={`flex gap-1 items-center`}>
                     <div><IconEye/></div>
                     <div className={`text-gray-500 text-xs`}>Đã trả lời bởi {conversationItem.info.last_user_care.name} lúc {
-                      conversationItem?.info?.last_chat?.from_customer === CONVERSATION_NOT_FROM_CUSTOMER && moment(conversationItem?.info?.last_chat?.created_at).format('HH:mm DD/MM/YYYY')}</div>
+                      conversationItem?.info?.last_chat?.from_customer === CONVERSATION_NOT_FROM_CUSTOMER && moment.unix(conversationItem?.info.last_chat_created_at_formated).format('HH:mm DD/MM/YYYY')}</div>
                   </div>
                 }
 
@@ -68,7 +74,14 @@ export default function Header({conversationItem} : {
               </div>
             </div>
             <div className={`flex gap-2 items-center`}>
-              {/*<div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconUser/></div>*/}
+              {
+                conversationItem?.customerInfor?.global_id && <Tooltip placement={'bottom'} title={'Trang cá nhân khách hàng'}>
+                  <div
+                    onClick={handleOpenFacebookProfile}
+                    className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconUser/></div>
+                </Tooltip>
+              }
+
               {/*<div className={`p-1 bg-neutral-200 rounded-md cursor-pointer hover:bg-neutral-400`}><IconUpload/></div>*/}
               {
                 conversationItem.info.is_read === CONVERSATION_IS_READ && <Tooltip placement={'bottom'} title={'Đánh dấu chưa đọc'}>
