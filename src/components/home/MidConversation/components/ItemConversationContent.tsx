@@ -17,6 +17,10 @@ export default function ItemConversationContent({position = 'left', historyItem,
   function getItemSide(){
     return historyItem.from_customer === CONVERSATION_FROM_CUSTOMER ? 'left' : 'right'
   }
+
+  if(typeof historyItem?.extra_info_chat_content !== 'undefined' && historyItem?.extra_info_chat_content?.length > 0){
+    console.log(historyItem)
+  }
   return (
     <div className={`flex gap-2 ${position === 'left' ? "" : 'flex-row-reverse items-end'} mt-1`}>
       {
@@ -63,7 +67,7 @@ export default function ItemConversationContent({position = 'left', historyItem,
               typeof historyItem.extra_info_chat_content !== 'undefined' && historyItem.extra_info_chat_content.length > 0 && <div className={`flex flex-col gap-2 my-2`}>
                 {
                   historyItem.extra_info_chat_content.map((itemEx, keyEx) => {
-                    return <div key={keyEx} className={`border-2 shadow-gray-200 border-gray-100 rounded-lg p-2 bg-white`}>
+                    return itemEx && <div key={keyEx} className={`border-2 shadow-gray-200 border-gray-100 rounded-lg p-2 bg-white`}>
                       <a className={`text-blue-500 text-sm`} rel={'noreferrer'} target={'_blank'} href={itemEx.url}>
                         {itemEx.title}
                       </a>
