@@ -66,7 +66,7 @@ export default function ListConversations() {
 
         {
           !isLoadingConversations && conversations.length > 0 && conversations.filter((itemConv) => {
-            return itemConv.customer_info.is_customer !== CONVERSATION_FROM_CUSTOMER
+            return itemConv.customer_info.is_customer === CONVERSATION_FROM_CUSTOMER
           }).map((conv, key) => {
             return <ListItemConversation key={key} conversationItem={conv}/>
           })
