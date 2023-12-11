@@ -8,6 +8,7 @@ import {IConversationItem} from "../../../../dto";
 import {getConversations} from "../../../../api/conversation";
 import {setConversationList} from "../../../../reducers/conversationSlice";
 import {useEffect, useState} from "react";
+import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 
 export default function ListConversations() {
   // eslint-disable-next-line
@@ -64,7 +65,9 @@ export default function ListConversations() {
 
 
         {
-          !isLoadingConversations && conversations.length > 0 && conversations.map((conv, key) => {
+          !isLoadingConversations && conversations.length > 0 && conversations.filter((itemConv) => {
+            return itemConv.customer_info.is_customer !== CONVERSATION_FROM_CUSTOMER
+          }).map((conv, key) => {
             return <ListItemConversation key={key} conversationItem={conv}/>
           })
         }
