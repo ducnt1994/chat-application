@@ -24,17 +24,6 @@ export const getCustomerById = async (projectId: string, id: string) => {
   return res.data.data;
 };
 
-// /**
-//  * @param {string} conversationId
-//  * @param {{params: {project_id: string}}} data
-//  * @returns
-//  */
-// export const getConversation = async (conversationId, data = {}) => {
-//   const uri = `/projects/bot-chat/conversations/${conversationId}`;
-//   const res = await API.get(uri, data);
-//   return res.data;
-// };
-//
 /**
  * @param {string} conversationId
  * @param {{params: {project_id: string, page: number}}} data
@@ -45,6 +34,13 @@ export const getConversationChats = async (conversationId : string, data = {}): 
   const res = await API.get(uri, data);
   return res.data.data;
 };
+
+export const likeCommentFacebook = async (projectId: string, channelId: string, data: {social_network_id: string}) => {
+  const uri = `/projects/${projectId}/channels/${channelId}/posts/detail/comment/like`;
+  const res = await API.post(uri, data);
+  return res.data.data;
+};
+
 //
 // /**
 //  * @param {{project_id: string, channel: string, customer_id: string}} data

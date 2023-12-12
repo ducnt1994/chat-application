@@ -4,7 +4,6 @@ import {IHistoryChat} from "../dto/conversation-list/response/history-chat";
 import {CONVERSATION_IS_READ} from "../utils/constants/conversation";
 import {ISocketMessage} from "../dto/socket";
 import {ICustomerInformation} from "../dto/customer/info/customer-information";
-import {CONVERSATION_NOT_FROM_CUSTOMER} from "../utils/constants/customer";
 
 interface IInitialState {
   conversations: IConversationItem[] | [];

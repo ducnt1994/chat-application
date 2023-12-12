@@ -8,7 +8,6 @@ import {IConversationItem} from "../../../../dto";
 import {getConversations} from "../../../../api/conversation";
 import {setConversationList} from "../../../../reducers/conversationSlice";
 import {useEffect, useState} from "react";
-import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 
 export default function ListConversations() {
   // eslint-disable-next-line

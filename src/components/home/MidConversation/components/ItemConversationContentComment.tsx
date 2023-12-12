@@ -5,7 +5,7 @@ import IconDetele from "../../../../assets/svg/MidConversation/ItemChat/IconDete
 import Avatar from "../../../shared/Avatar";
 import {IHistoryChat, IMediaItem} from "../../../../dto/conversation-list/response/history-chat";
 import {Image, Checkbox, Typography, Popover, Tooltip} from "antd";
-import {IMAGE_ERROR} from "../../../../utils/constants/conversation";
+import {CONVERSATION_IS_NOT_LIKE, IMAGE_ERROR} from "../../../../utils/constants/conversation";
 import {getRandomColor} from "../../../../helper/color";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import moment from "moment";
@@ -15,6 +15,8 @@ import {setCommentToReply} from "../../../../reducers/conversationSlice";
 import {useMemo} from "react";
 import styles from "./custom.module.scss"
 import {MEDIA_TYPE_FILE_IMAGE} from "../../../../utils/constants/medias";
+import {likeCommentFacebook} from "../../../../api/conversation";
+import {getUserInfor} from "../../../../helper/common";
 
 
 export default function ItemConversationContentComment({historyItem} : {
@@ -59,9 +61,9 @@ export const ItemRender = ({historyItem, borderColorItem} : {
     return 3
   }
   
-  // const likeComment = () => {
-  //
-  // }
+  const likeComment = async () => {
+    // const response = await likeCommentFacebook(getUserInfor().last_project_active, historyItem._id, {social_network_id: historyItem.social_network_id})
+  }
   //
   // const hideComment = () => {
   //
@@ -125,7 +127,8 @@ export const ItemRender = ({historyItem, borderColorItem} : {
 
             <div className={`mt-2 flex gap-3 justify-end`}>
               {
-                typeof historyItem.is_like !== 'undefined' && <div className={'cursor-pointer'}><IconLike active={historyItem.is_like === 1}/></div>
+                typeof historyItem.is_like !== 'undefined'
+                && <div className={'cursor-pointer'} onClick={likeComment}><IconLike active={historyItem.is_like === 1}/></div>
               }
               {
                 typeof historyItem.is_hide !== 'undefined' && <div className={'cursor-pointer'}><IconHideComment active={historyItem.is_hide === 1}/></div>
