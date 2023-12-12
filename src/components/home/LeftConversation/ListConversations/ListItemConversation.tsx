@@ -124,7 +124,7 @@ export default function ListItemConversation({conversationItem} : {
                   name: conversationItem.customer_info.name,
                   timestamp: conversationItem.last_chat.timestamp
                 },
-                user_so9_id: conversationItem.customer_info._id,
+                user_so9_id: conversationItem.customer_info.id || conversationItem.customer_info._id,
                 conversation_id: conversationItem?._id
               }
             }
