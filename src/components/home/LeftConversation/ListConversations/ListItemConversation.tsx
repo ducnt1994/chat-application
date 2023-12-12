@@ -91,7 +91,26 @@ export default function ListItemConversation({conversationItem} : {
   }
 
   const handleFetchUserByExt = async () => {
+    console.log('debug fetch user')
     if(checkIsInstalledExt() && conversationItem.is_read === CONVERSATION_IS_NOT_READ && !conversationItem.customer_info.global_id){
+      console.log('=========FETCH_USER')
+      console.log({detail:
+          {
+            method:"FETCH_USER",
+            data: {
+              project_id: getUserInfor().last_project_active,
+              page_id: conversationItem.channel_infor.platform_id,
+              filter: {
+                page_id: conversationItem.channel_infor.platform_id,
+                id: "",
+                name: conversationItem.customer_info.name,
+                timestamp: conversationItem.last_chat.timestamp
+              },
+              user_so9_id: conversationItem.customer_info._id,
+              conversation_id: conversationItem?._id
+            }
+          }
+      })
       const callAPIEvent = new CustomEvent('callAPI',
         {detail:
             {
@@ -110,7 +129,8 @@ export default function ListItemConversation({conversationItem} : {
               }
             }
         });
-      document.dispatchEvent(callAPIEvent);
+      const res = document.dispatchEvent(callAPIEvent);
+      console.log({res})
     }
   }
 
