@@ -28,7 +28,7 @@ import {
   getCustomerById
 } from "../../../../api/conversation";
 import {Tooltip, Avatar as Avt, message} from "antd";
-import {getUserInfor} from "../../../../helper/common";
+import {checkIsInstalledExt, getUserInfor} from "../../../../helper/common";
 import {ICustomerInformation} from "../../../../dto/customer/info/customer-information";
 
 export default function ListItemConversation({conversationItem} : {
@@ -90,6 +90,30 @@ export default function ListItemConversation({conversationItem} : {
     }
   }
 
+  const handleFetchUserByExt = async () => {
+    if(checkIsInstalledExt() && conversationItem.is_read === CONVERSATION_IS_NOT_READ && !conversationItem.customer_info.global_id){
+      const callAPIEvent = new CustomEvent('callAPI',
+        {detail:
+            {
+              method:"FETCH_USER",
+              data: {
+                project_id: getUserInfor().last_project_active,
+                page_id: conversationItem.channel_infor.platform_id,
+                filter: {
+                  page_id: conversationItem.channel_infor.platform_id,
+                  id: "",
+                  name: conversationItem.customer_info.name,
+                  timestamp: conversationItem.last_chat.timestamp
+                },
+                user_so9_id: conversationItem.customer_info._id,
+                conversation_id: conversationItem?._id
+              }
+            }
+        });
+      document.dispatchEvent(callAPIEvent);
+    }
+  }
+
   const handleClickItem = async () => {
     dispatch(setActiveConversationId({id: conversationItem._id}))
 
@@ -97,7 +121,8 @@ export default function ListItemConversation({conversationItem} : {
       //mark-read if not read
       handleMarkingReadConversation(),
       handleFetchChatHistory(),
-      handleFetchCustomerInfor()
+      handleFetchCustomerInfor(),
+      handleFetchUserByExt()
     ])
   }
 
