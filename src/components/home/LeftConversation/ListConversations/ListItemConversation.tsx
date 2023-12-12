@@ -92,7 +92,7 @@ export default function ListItemConversation({conversationItem} : {
 
   const handleFetchUserByExt = async () => {
     console.log('debug fetch user')
-    if(checkIsInstalledExt() && conversationItem.is_read === CONVERSATION_IS_NOT_READ &&
+    if(checkIsInstalledExt() &&
       !conversationItem.customer_info.global_id &&
       ((typeof conversationItem.last_chat.timestamp !== 'undefined' && conversationItem.last_chat.timestamp > 0) ||
       conversationItem.customer_info.name)
