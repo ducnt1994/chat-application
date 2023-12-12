@@ -385,7 +385,7 @@ export default function CreateChat({conversationItem} : {
   }, [activeConversationId]);
 
   return (
-    <div className={`bg-create-chat px-1 py-2 text-left`}>
+    <div className={`bg-create-chat px-1 text-left`}>
       <FileUploadPreview
         handleRemoveFileUpload={(index: number) => handleRemoveFileUpload(index)}
         fileListSelected={fileListSelected}/>
@@ -402,7 +402,7 @@ export default function CreateChat({conversationItem} : {
         allowClear
       />
 
-      <div className={`flex items-center mt-4 pb-2`}>
+      <div className={`flex items-center mt-2`}>
         <div className={`flex-1`}>
           {
             isSendMessageSuccess && <Typography className={`text-xs text-green-500`}>Gửi tin nhắn thành công</Typography>
@@ -411,7 +411,7 @@ export default function CreateChat({conversationItem} : {
             isSendMessageFail && <Typography className={`text-xs text-red-500`} onClick={handleSendMessage}>Gửi tin nhắn không thành công</Typography>
           }
         </div>
-        <div className={`flex gap-3`}>
+        <div className={`flex gap-3 h-[30px]`}>
           <div className={`relative`}>
             <UploadFile
               handleSelectFileFromLocal={(itemList: ItemFile[]) => handleSelectFileFromLocal(itemList)}
