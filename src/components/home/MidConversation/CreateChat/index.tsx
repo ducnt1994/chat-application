@@ -251,10 +251,8 @@ export default function CreateChat({conversationItem} : {
         }))
       }
       setIsSendMessageSuccess(true)
-      handleResetData()
     } catch (e) {
       setIsSendMessageFail(true)
-      handleResetData()
     }
   }
 
