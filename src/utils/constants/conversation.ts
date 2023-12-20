@@ -10,6 +10,9 @@ export const CONVERSATION_IS_NOT_HIDE = 0;
 export const CONVERSATION_IS_LIKE = 1;
 export const CONVERSATION_IS_NOT_LIKE = 0;
 
+export const CONVERSATION_IS_DELETE = 1;
+export const CONVERSATION_IS_NOT_DELETE = 0;
+
 export const CONVERSATION_IS_REPLY = 1;
 export const CONVERSATION_IS_NOT_REPLY = 0;
 

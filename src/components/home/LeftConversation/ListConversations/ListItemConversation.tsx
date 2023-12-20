@@ -63,8 +63,10 @@ export default function ListItemConversation({conversationItem} : {
   }
   
   const handleFetchCustomerInfor = async () => {
-    const customerInfor : ICustomerInformation = await getCustomerById(userInfor.last_project_active, conversationItem.customer_info.id)
-    dispatch(setCustomerInformation({id: conversationItem._id, customer_info: customerInfor}));
+    if(conversationItem.customer_info.is_customer === CONVERSATION_FROM_CUSTOMER){
+      const customerInfor : ICustomerInformation = await getCustomerById(userInfor.last_project_active, conversationItem.customer_info.id)
+      dispatch(setCustomerInformation({id: conversationItem._id, customer_info: customerInfor}));
+    }
   }
 
   const handleFetchChatHistory = async () => {
@@ -91,7 +93,6 @@ export default function ListItemConversation({conversationItem} : {
   }
 
   const handleFetchUserByExt = async () => {
-    console.log('debug fetch user')
     if(checkIsInstalledExt() &&
       !conversationItem.customer_info.global_id &&
       ((typeof conversationItem.last_chat.timestamp !== 'undefined' && conversationItem.last_chat.timestamp > 0) ||
@@ -116,7 +117,7 @@ export default function ListItemConversation({conversationItem} : {
             }
         });
       const res = document.dispatchEvent(callAPIEvent);
-      console.log({res})
+      console.log({log_ext: res})
     }
   }
 

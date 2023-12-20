@@ -4,18 +4,25 @@ import IconComment from "../../../../assets/svg/MidConversation/ItemChat/IconCom
 import IconDetele from "../../../../assets/svg/MidConversation/ItemChat/IconDetele";
 import Avatar from "../../../shared/Avatar";
 import {IHistoryChat, IMediaItem} from "../../../../dto/conversation-list/response/history-chat";
-import {Image, Checkbox, Typography, Popover, Tooltip} from "antd";
-import {CONVERSATION_IS_NOT_LIKE, IMAGE_ERROR} from "../../../../utils/constants/conversation";
+import {Image, Checkbox, Typography, Popover, Tooltip, message} from "antd";
+import {
+  CONVERSATION_IS_DELETE,
+  CONVERSATION_IS_HIDE,
+  CONVERSATION_IS_LIKE, CONVERSATION_IS_NOT_DELETE,
+  CONVERSATION_IS_NOT_HIDE,
+  CONVERSATION_IS_NOT_LIKE,
+  IMAGE_ERROR
+} from "../../../../utils/constants/conversation";
 import {getRandomColor} from "../../../../helper/color";
 import {CONVERSATION_FROM_CUSTOMER} from "../../../../utils/constants/customer";
 import moment from "moment";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../../../store";
-import {setCommentToReply} from "../../../../reducers/conversationSlice";
+import {actionToComment, setCommentToReply} from "../../../../reducers/conversationSlice";
 import {useMemo} from "react";
 import styles from "./custom.module.scss"
 import {MEDIA_TYPE_FILE_IMAGE} from "../../../../utils/constants/medias";
-import {likeCommentFacebook} from "../../../../api/conversation";
+import {deleteCommentFacebook, hideCommentFacebook, likeCommentFacebook} from "../../../../api/conversation";
 import {getUserInfor} from "../../../../helper/common";
 
 
@@ -33,7 +40,9 @@ export default function ItemConversationContentComment({historyItem} : {
         typeof historyItem.children !== "undefined" && historyItem.children.map((item, key) => {
           return <ItemRender
             historyItem={item}
+            isChild={true}
             key={key}
+            parentId={historyItem._id}
             borderColorItem={colorForItem}
           />
         })
@@ -42,9 +51,11 @@ export default function ItemConversationContentComment({historyItem} : {
   )
 }
 
-export const ItemRender = ({historyItem, borderColorItem} : {
+export const ItemRender = ({historyItem, borderColorItem, isChild = false, parentId} : {
   historyItem: IHistoryChat
   borderColorItem: string
+  isChild?: boolean
+  parentId?: string
 }) => {
   const {selectedCommentIdToReply} = useSelector((state : RootState) => state.conversation)
   const dispatch = useDispatch()
@@ -62,16 +73,100 @@ export const ItemRender = ({historyItem, borderColorItem} : {
   }
   
   const likeComment = async () => {
-    // const response = await likeCommentFacebook(getUserInfor().last_project_active, historyItem._id, {social_network_id: historyItem.social_network_id})
+    if(typeof historyItem.is_like === 'undefined' || historyItem.is_like === CONVERSATION_IS_NOT_LIKE){
+      dispatch(actionToComment({
+        parentId: isChild && parentId ? parentId : historyItem._id,
+        isChild: isChild,
+        childId: historyItem.id || "",
+        conversationId: historyItem.conversation_id,
+        field: {
+          key: 'is_like',
+          value: CONVERSATION_IS_LIKE
+        }
+      }))
+      try {
+        const response = await likeCommentFacebook(getUserInfor().last_project_active, historyItem.channel, {social_network_id: historyItem.social_network_id})
+        if(!response){
+          dispatch(actionToComment({
+            parentId: isChild && parentId ? parentId : historyItem._id,
+            childId: historyItem.id || "",
+            conversationId: historyItem.conversation_id,
+            isChild: isChild,
+            field: {
+              key: 'is_like',
+              value: CONVERSATION_IS_NOT_LIKE
+            }
+          }))
+        }
+      } catch (e) {
+        message.error('Không thể thực hiện tác vụ. Vui lòng thử lại sau')
+      }
+    }
   }
   //
-  // const hideComment = () => {
-  //
-  // }
-  //
-  // const deleteComment = () => {
-  //
-  // }
+  const hideComment = async () => {
+    if(typeof historyItem.is_like === 'undefined' || historyItem.is_hide === CONVERSATION_IS_NOT_HIDE){
+      dispatch(actionToComment({
+        parentId: isChild && parentId ? parentId : historyItem._id,
+        isChild: isChild,
+        childId: historyItem.id || "",
+        conversationId: historyItem.conversation_id,
+        field: {
+          key: 'is_hide',
+          value: CONVERSATION_IS_HIDE
+        }
+      }))
+      try {
+        const response = await hideCommentFacebook(getUserInfor().last_project_active, historyItem.channel, {social_network_id: historyItem.social_network_id})
+        if(!response){
+          dispatch(actionToComment({
+            parentId: isChild && parentId ? parentId : historyItem._id,
+            isChild: isChild,
+            childId: historyItem.id || "",
+            conversationId: historyItem.conversation_id,
+            field: {
+              key: 'is_hide',
+              value: CONVERSATION_IS_NOT_HIDE
+            }
+          }))
+        }
+      } catch (e) {
+        message.error('Không thể thực hiện tác vụ. Vui lòng thử lại sau')
+      }
+    }
+  }
+
+  const deleteComment = async () => {
+    if(typeof historyItem.is_delete === 'undefined' || historyItem.is_delete === CONVERSATION_IS_NOT_DELETE){
+      dispatch(actionToComment({
+        parentId: isChild && parentId ? parentId : historyItem._id,
+        isChild: isChild,
+        childId: historyItem.id || "",
+        conversationId: historyItem.conversation_id,
+        field: {
+          key: 'is_delete',
+          value: CONVERSATION_IS_DELETE
+        }
+      }))
+      try {
+        const response = await deleteCommentFacebook(getUserInfor().last_project_active, historyItem.channel, {social_network_id: historyItem.social_network_id})
+        if(!response){
+          dispatch(actionToComment({
+            parentId: isChild && parentId ? parentId : historyItem._id,
+            isChild: isChild,
+            childId: historyItem.id || "",
+            conversationId: historyItem.conversation_id,
+            field: {
+              key: 'is_hide',
+              value: CONVERSATION_IS_NOT_DELETE
+            }
+          }))
+        }
+      } catch (e) {
+        message.error('Không thể thực hiện tác vụ. Vui lòng thử lại sau')
+      }
+    }
+  }
 
   const handleSelectCommentToReply = () => {
     const idToSet = historyItem.social_network_id !== selectedCommentIdToReply ? historyItem.social_network_id : ""
@@ -128,20 +223,59 @@ export const ItemRender = ({historyItem, borderColorItem} : {
             <div className={`mt-2 flex gap-3 justify-end`}>
               {
                 typeof historyItem.is_like !== 'undefined'
-                && <div className={'cursor-pointer'} onClick={likeComment}><IconLike active={historyItem.is_like === 1}/></div>
+                && <Tooltip placement={'top'}
+                            overlayInnerStyle={{
+                              padding: '2px 4px',
+                              minHeight: 'fit-content',
+                              fontSize: '10px'
+                }} title={'Thích bình luận'} trigger={'hover'}>
+                  <div className={'cursor-pointer'} onClick={likeComment}>
+                    <IconLike active={historyItem.is_like === 1}/>
+                  </div>
+                </Tooltip>
               }
               {
-                typeof historyItem.is_hide !== 'undefined' && <div className={'cursor-pointer'}><IconHideComment active={historyItem.is_hide === 1}/></div>
+                typeof historyItem.is_hide !== 'undefined'
+                && <Tooltip placement={'top'}
+                            overlayInnerStyle={{
+                              padding: '2px 4px',
+                              minHeight: 'fit-content',
+                              fontSize: '10px'
+                            }} title={'Ẩn bình luận'} trigger={'hover'}>
+                  <div onClick={hideComment} className={'cursor-pointer'}><IconHideComment active={historyItem.is_hide === 1}/></div>
+                </Tooltip>
               }
               {
                 historyItem.from_customer === CONVERSATION_FROM_CUSTOMER && typeof historyItem.is_reply !== 'undefined' &&
-                <div className={'cursor-pointer'}><IconComment active={ historyItem.is_reply === 1}/></div>
+                <Tooltip placement={'top'}
+                         overlayInnerStyle={{
+                           padding: '2px 4px',
+                           minHeight: 'fit-content',
+                           fontSize: '10px'
+                         }} title={'Gửi tin nhắn riêng'} trigger={'hover'}>
+                  <div className={'cursor-pointer'}><IconComment active={ historyItem.is_reply === 1}/></div>
+                </Tooltip>
               }
               {
-                typeof historyItem.is_reply !== 'undefined' && <div className={'cursor-pointer'} onClick={handleOpenComment}><img alt={''} src={'/icon-fb-chat.png'}/></div>
+                typeof historyItem.is_reply !== 'undefined'
+                && <Tooltip placement={'top'}
+                            overlayInnerStyle={{
+                              padding: '2px 4px',
+                              minHeight: 'fit-content',
+                              fontSize: '10px'
+                            }} title={'Xem bình luận trên fb'} trigger={'hover'}>
+                  <div className={'cursor-pointer'} onClick={handleOpenComment}><img alt={''} src={'/icon-fb-chat.png'}/></div>
+                </Tooltip>
               }
               {
-                typeof historyItem.is_delete !== 'undefined' && <div className={'cursor-pointer'}><IconDetele active={historyItem.is_delete === 1}/></div>
+                 <Tooltip placement={'top'}
+                            overlayInnerStyle={{
+                              padding: '2px 4px',
+                              minHeight: 'fit-content',
+                              fontSize: '10px'
+                            }} title={'Xoá bình luận'} trigger={'hover'}>
+                  <div onClick={deleteComment} className={'cursor-pointer'}><IconDetele active={historyItem.is_delete === 1}/></div>
+                </Tooltip>
               }
             </div>
           </div>

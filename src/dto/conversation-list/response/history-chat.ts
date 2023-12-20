@@ -47,4 +47,5 @@ export interface IHistoryChat {
     url: string,
     title: string
   }[]
+  id?: string
 }

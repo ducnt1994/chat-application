@@ -270,6 +270,36 @@ export const conversationSlice = createSlice({
         state.conversationListLoaded[conversationLoadedIndex] = newData;
       }
     },
+    actionToComment(state: any, action : PayloadAction<{
+      conversationId : string,
+      parentId: string,
+      isChild: boolean,
+      childId: string,
+      field: {
+        key: string,
+        value: number
+      }
+    }>){
+      const conversationId = action.payload.conversationId
+      // tìm conversation để thay thế
+      const findIndexConversationLoaded = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === conversationId);
+      if(findIndexConversationLoaded >= 0){
+        const newData = {...state.conversationListLoaded[findIndexConversationLoaded]}
+        const findIndexHistoryItem = newData.chatHistory.findIndex((child: IHistoryChat) => child._id === action.payload.parentId)
+        if(findIndexHistoryItem >= 0){
+          if(action.payload.isChild){
+            const findIndexChild = newData.chatHistory[findIndexHistoryItem].children.findIndex((item: IHistoryChat) => item.id === action.payload.childId)
+            if(findIndexChild >= 0){
+              newData.chatHistory[findIndexHistoryItem].children[findIndexChild][action.payload.field.key] = action.payload.field.value
+            }
+          } else {
+            newData.chatHistory[findIndexHistoryItem][action.payload.field.key] = action.payload.field.value
+          }
+        }
+        state.conversationListLoaded[findIndexConversationLoaded] = newData;
+      }
+    },
+
   },
   // extraReducers: (builder) => {
   //   builder.addCase(fetchOneConversation.fulfilled, (state, action) => {
@@ -298,6 +328,7 @@ export const {
   removeNoteData,
   setChatSocket,
   setCommentSocket,
-  setCustomerInformation
+  setCustomerInformation,
+  actionToComment
 } = conversationSlice.actions;
 export default conversationSlice.reducer;

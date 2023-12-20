@@ -41,6 +41,20 @@ export const likeCommentFacebook = async (projectId: string, channelId: string, 
   return res.data.data;
 };
 
+export const hideCommentFacebook = async (projectId: string, channelId: string, data: {social_network_id: string}) => {
+  const uri = `/projects/${projectId}/channels/${channelId}/posts/detail/comment/hide`;
+  const res = await API.post(uri, data);
+  return res.data.data;
+};
+
+export const deleteCommentFacebook = async (projectId: string, channelId: string, data: {social_network_id: string}) => {
+  const uri = `/projects/${projectId}/channels/${channelId}/posts/detail/comment/delete`;
+  const res = await API.delete(uri, {
+    params: data
+  });
+  return res.data.data;
+};
+
 //
 // /**
 //  * @param {{project_id: string, channel: string, customer_id: string}} data
