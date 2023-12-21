@@ -98,16 +98,16 @@ export const conversationSlice = createSlice({
         state.conversationListLoaded[conversationLoadedIndex] = newData;
       }
     },
-    setHistoryItem(state: any, action: PayloadAction<{historyItem: IHistoryChat}>){
-      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === state.activeConversationId);
+    setHistoryItem(state: any, action: PayloadAction<{historyItem: IHistoryChat, conversationId: string}>){
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversationId);
       if(conversationLoadedIndex !== false){
         const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
         newData.chatHistory.push(action.payload.historyItem)
         state.conversationListLoaded[conversationLoadedIndex] = newData;
       }
     },
-    setHistoryItemByFakeId(state: any, action: PayloadAction<{historyItem: IHistoryChat, fakeId: string}>){
-      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === state.activeConversationId);
+    setHistoryItemByFakeId(state: any, action: PayloadAction<{historyItem: IHistoryChat, fakeId: string, conversationId: string}>){
+      const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === action.payload.conversationId);
       if(conversationLoadedIndex !== false){
         const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
         const indexHistoryItemByFakeId = newData.chatHistory.findIndex((history : IHistoryChat) => history.fake_id === action.payload.fakeId)
@@ -230,6 +230,7 @@ export const conversationSlice = createSlice({
       const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === conversation._id);
       if(conversationLoadedIndex >= 0){
         const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
+        console.log({newData})
         const childIndex = newData.chatHistory.findIndex((child: IHistoryChat) => child._id === relateConversationItem._id)
         if(childIndex >= 0){
           newData.chatHistory.splice(childIndex, 1 , relateConversationItem)

@@ -1,4 +1,4 @@
-import {Input, message, Popover, Tooltip, Typography} from 'antd';
+import {Input, message, Popover, Tooltip} from 'antd';
 import {useEffect, useState} from "react";
 import IconAddSampleReply from "../../../../assets/svg/MidConversation/CreateChat/IconAddSampleReply";
 import IconSend from "../../../../assets/svg/MidConversation/CreateChat/IconSend";
@@ -222,7 +222,7 @@ export default function CreateChat({conversationItem} : {
         project_id: userInfor.last_project_active
       }
     }));
-    dispatch(setHistoryItem({historyItem: fakeData}))
+    dispatch(setHistoryItem({historyItem: fakeData, conversationId: conversationItem?.conversationId || ""}))
     let imageSend : string[] = []
     if(fileListSelected.length > 0){
       await Promise.all(fileListSelected.map(async (file) => {
@@ -247,7 +247,8 @@ export default function CreateChat({conversationItem} : {
         const sendMessage = await sendChat(conversationItem?.info._id || "", data)
         dispatch(setHistoryItemByFakeId({
           fakeId: fakeData.fake_id,
-          historyItem: sendMessage
+          historyItem: sendMessage,
+          conversationId: conversationItem?.conversationId || ""
         }))
       }
       setIsSendMessageSuccess(true)
@@ -400,15 +401,15 @@ export default function CreateChat({conversationItem} : {
         allowClear
       />
 
-      <div className={`flex items-center mt-2`}>
-        <div className={`flex-1`}>
-          {
-            isSendMessageSuccess && <Typography className={`text-xs text-green-500`}>Gửi tin nhắn thành công</Typography>
-          }
-          {
-            isSendMessageFail && <Typography className={`text-xs text-red-500`} onClick={handleSendMessage}>Gửi tin nhắn không thành công</Typography>
-          }
-        </div>
+      <div className={`flex items-center justify-end mt-2`}>
+        {/*<div className={`flex-1`}>*/}
+        {/*  {*/}
+        {/*    isSendMessageSuccess && <Typography className={`text-xs text-green-500`}>Gửi tin nhắn thành công</Typography>*/}
+        {/*  }*/}
+        {/*  {*/}
+        {/*    isSendMessageFail && <Typography className={`text-xs text-red-500`} onClick={handleSendMessage}>Gửi tin nhắn không thành công</Typography>*/}
+        {/*  }*/}
+        {/*</div>*/}
         <div className={`flex gap-3 h-[30px]`}>
           <div className={`relative`}>
             <UploadFile

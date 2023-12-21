@@ -20,7 +20,7 @@ export default function ConversationContent({conversationItem} : {
   return (
     <>
       {
-        conversationItem && <div className={`overflow-y-scroll bg-empty-bg p-4 flex-1`}>
+        conversationItem && <div className={`overflow-y-scroll bg-empty-bg px-4 pt-4 flex-1`}>
           {
             conversationItem.info.type === CONVERSATION_TYPE_COMMENT_FB &&
             conversationItem.info.meta_data &&
@@ -33,7 +33,7 @@ export default function ConversationContent({conversationItem} : {
               <ChatContent conversationItem={conversationItem}/>
             )
           }
-          <div id={'chat-content'} ref={refDom} />
+          <div className={`mt-3`} id={'chat-content'} ref={refDom} />
         </div>
       }
     </>
