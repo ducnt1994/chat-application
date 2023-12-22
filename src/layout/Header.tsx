@@ -3,14 +3,19 @@ import IconSetting from "../components/icons/IconSetting";
 import IconAnalyst from "../components/icons/IconAnalyst";
 import CountMessage from "../components/shared/CountMessage";
 import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {getConversationUnread} from "../api/conversation";
+import {getUserInfor} from "../helper/common";
+import {message} from "antd";
 export default function Header() {
   const navigate = useNavigate()
+  const [totalUnreadMessage, setTotalUnreadMessage] = useState(0)
   const headerList = [
     {
       id: 1,
       path: '/',
       name: 'Hội thoại',
-      preIcon: <CountMessage total={2}/>
+      preIcon: <CountMessage total={totalUnreadMessage}/>
     },
     {
       id: 2,
@@ -25,6 +30,22 @@ export default function Header() {
       preIcon: <IconSetting/>
     }
   ];
+
+  const handleFetchCountUnreadMessage = async () => {
+    try {
+      const getTotalMessage = await getConversationUnread(getUserInfor().last_project_active)
+      if(getTotalMessage){
+        setTotalUnreadMessage(getTotalMessage)
+      }
+    } catch (e) {
+      message.error('Đã có lỗi xảy ra. Vui lòng thử lại sau ít phút')
+      setTotalUnreadMessage(0)
+    }
+  }
+
+  useEffect(() => {
+    handleFetchCountUnreadMessage()
+  }, []);
     return (
         <div className={`bg-header flex fixed top-0 w-full`} style={{height: "55px"}}>
           <div className={`w-[224px] flex items-center cursor-pointer`} onClick={() => navigate('/')}>

@@ -92,17 +92,22 @@ export const confirmUnread = async (conversationId: string, data = {}) => {
   const res = await API.post(uri, data);
   return res.data;
 };
-//
-// /**
-//  * @param {project_id: string} project_id
-//  * @returns
-//  */
-// export const getConversationUnread = async (data = {}) => {
-//   const uri = `projects/bot-chat/conversations/unRead`;
-//   const res = await API.get(uri, data);
-//   return res.data;
-// };
-//
+
+/**
+ * đếm số lượng tin nhắn chưa đọc
+ * @param {projectId: string} projectId
+ * @returns
+ */
+export const getConversationUnread = async (projectId: string) => {
+  const uri = `projects/bot-chat/conversations/unRead`;
+  const res = await API.get(uri, {
+    params: {
+      project_id: projectId
+    }
+  });
+  return res.data.data;
+};
+
 /**
  * @param {string} conversationId
  * @param {{params: {project_id: string, page: number}}} data

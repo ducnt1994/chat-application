@@ -50,7 +50,7 @@ export default function MidConversation() {
   }, [ activeConversationId, conversationListLoaded ])
 
   return (
-    <div className={'w-[60%] bg-empty-bg flex flex-col'}>
+    <div className={`w-[80%] lg:w-[60%] bg-empty-bg flex flex-col`}>
       <Header conversationItem={activeItem}/>
       <ConversationContent conversationItem={activeItem}/>
       <CreateChat conversationItem={activeItem}/>

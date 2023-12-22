@@ -32,7 +32,7 @@ export default function RightConversation() {
   }, [ activeConversationId, conversationListLoaded ])
 
   return (
-    <div className={'w-[20%]'}>
+    <div className={'lg:w-[20%] w-0 hidden lg:block'}>
       <Tabs className={`${styles.tabCustom}`}
             defaultActiveKey={activeTab}
             items={items}
