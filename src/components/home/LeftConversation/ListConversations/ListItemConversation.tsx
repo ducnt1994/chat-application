@@ -138,7 +138,7 @@ export default function ListItemConversation({conversationItem} : {
       {
         conversationItem.last_chat && <div className={`flex py-3 gap-4 pl-3 pr-1 items-center ${conversationItem._id === activeConversationId
           ? 'bg-conversation-active'
-          : (conversationItem.is_read === CONVERSATION_IS_NOT_READ && conversationItem.last_chat.from_customer === CONVERSATION_FROM_CUSTOMER)
+          : (conversationItem.is_read === CONVERSATION_IS_NOT_READ)
             ? 'bg-conversation-not-read'
             : 'bg-white'} hover:bg-conversation-active cursor-pointer border-t border-t-gray-300`}
                                            onClick={handleClickItem}
@@ -148,7 +148,7 @@ export default function ListItemConversation({conversationItem} : {
               url={conversationItem.customer_info.avatar}
               size={50}
               absoluteComp={
-                conversationItem.is_read === CONVERSATION_IS_NOT_READ && conversationItem.last_chat.from_customer === CONVERSATION_FROM_CUSTOMER ? <div className={`absolute right-0 bottom-0`}><CountMessage total={conversationItem.number_new_chat}/></div> : <></>
+                conversationItem.is_read === CONVERSATION_IS_NOT_READ ? <div className={`absolute right-0 bottom-0`}><CountMessage total={conversationItem.number_new_chat}/></div> : <></>
               }/>
             <div className={`flex-1 text-left`}>
               <div className={`font-bold text-gray-500 text-sm`}>{conversationItem.customer_info.name}</div>
