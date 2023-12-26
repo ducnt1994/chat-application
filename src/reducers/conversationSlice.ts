@@ -222,11 +222,13 @@ export const conversationSlice = createSlice({
       // tìm conversation để thay thế
       const conversationIndexBySocket = state.conversations.findIndex((item : IConversationItem) => item._id === conversation._id);
       if(conversationIndexBySocket >= 0){
-        state.conversations.splice(conversationIndexBySocket, 1, conversation) // thay bằng conversation mới
+        // thay bằng conversation mới và đưa lên đầu
+        state.conversations.splice(conversationIndexBySocket, 1).unshift(conversation)
       } else {
         state.conversations.unshift(conversation)
       }
 
+      // tìm lịch sử chat để thêm mới vào
       const conversationLoadedIndex = state.conversationListLoaded.findIndex((item : IConversationItemLoaded) => item.conversationId === conversation._id);
       if(conversationLoadedIndex >= 0){
         const newData = {...state.conversationListLoaded[conversationLoadedIndex]}
@@ -253,7 +255,7 @@ export const conversationSlice = createSlice({
       // tìm conversation để thay thế
       const conversationIndexBySocket = state.conversations.findIndex((item : IConversationItem) => item._id === conversation._id);
       if(conversationIndexBySocket >= 0){
-        state.conversations.splice(conversationIndexBySocket, 1, conversation) // thay bằng conversation mới
+        state.conversations.splice(conversationIndexBySocket, 1).unshift(conversation) // thay bằng conversation mới
       } else {
         state.conversations.unshift(conversation)
       }

@@ -15,7 +15,7 @@ export default function Header() {
       id: 1,
       path: '/',
       name: 'Hội thoại',
-      preIcon: <CountMessage total={totalUnreadMessage}/>
+      preIcon: totalUnreadMessage > 0 ? <CountMessage total={totalUnreadMessage}/> : null
     },
     {
       id: 2,
