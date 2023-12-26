@@ -223,7 +223,8 @@ export const conversationSlice = createSlice({
       const conversationIndexBySocket = state.conversations.findIndex((item : IConversationItem) => item._id === conversation._id);
       if(conversationIndexBySocket >= 0){
         // thay bằng conversation mới và đưa lên đầu
-        state.conversations.splice(conversationIndexBySocket, 1).unshift(conversation)
+        state.conversations.splice(conversationIndexBySocket, 1)
+        state.conversations.unshift(conversation)
       } else {
         state.conversations.unshift(conversation)
       }
@@ -255,7 +256,8 @@ export const conversationSlice = createSlice({
       // tìm conversation để thay thế
       const conversationIndexBySocket = state.conversations.findIndex((item : IConversationItem) => item._id === conversation._id);
       if(conversationIndexBySocket >= 0){
-        state.conversations.splice(conversationIndexBySocket, 1).unshift(conversation) // thay bằng conversation mới
+        state.conversations.splice(conversationIndexBySocket, 1) // thay bằng conversation mới
+        state.conversations.unshift(conversation)
       } else {
         state.conversations.unshift(conversation)
       }

@@ -14,7 +14,7 @@ export default function ConversationContent({conversationItem} : {
     if(typeof conversationItem !== 'undefined' && conversationItem?.chatHistory.length > 0){
       setTimeout(() => {
         refDom.current?.scrollIntoView({ behavior: 'smooth', block: 'end'})
-      }, 500)
+      }, 10)
     }
   }, [conversationItem]);
   return (

@@ -36,15 +36,14 @@ export default function ListConversations() {
   }
 
   useEffect(() => {
-    const scrollDom = document.getElementById('left-conversation')
+    const scrollDom = document.getElementsByClassName('infinite-scroll-component')
     if(scrollDom){
-      scrollDom.scrollTo({top: 0, behavior: 'smooth'})
+      scrollDom[0].scrollTo({top: 0, left: 0, behavior: 'smooth'})
     }
   }, [scrollToTop]);
 
   return (
     <div id={'left-conversation'}>
-      <input name="9hub" defaultValue="pnggbmbenebnjldiocnpklocljgageeo" style={{display: "none"}}/>
       <InfiniteScroll
         dataLength={conversationPage * 20}
         next={loadMoreConversation}
